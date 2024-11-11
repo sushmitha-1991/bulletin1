@@ -1,0 +1,93 @@
+package com.dsp.bulletin1.entity;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import com.dsp.bulletin1.dto.MastersRajyaSabhaSessionDTO;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+	    
+	@Data
+	@EqualsAndHashCode(callSuper = false)
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Entity
+	@Builder
+	@Table(name ="bulletin1_details", schema="bulletin1")
+	public class Bulletin1Details extends Auditable
+	{  
+		@Id
+		@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bulletin1_details_seq")
+		@SequenceGenerator(name = "bulletin1_details_seq", sequenceName = "bulletin1_details_seq", allocationSize = 1)
+		private Long id; 
+
+		@Column(name = "bulletin_date", nullable = false)
+		private LocalDate bulletinDate;
+		
+		@Column(name = "bulletin_date_hindi")
+		private String bulletinDateHindi;
+
+    	@Column(name = "lok_sabha_no")
+    	private Long lokSabhaNo;
+	
+    	@Column(name = "lok_sabha_session_no")
+    	private Long lokSabhaSessionNo; 
+		
+    	@Column(name = "rajya_sabha_session_no")
+    	private Long rajyaSabhaSessionNo; 
+	
+		@Column(name = "bulletin1_content", length = 1024)
+		private String bulletin1Content;
+
+		@Column(name = "ref_no",nullable = false,length = 1024,unique = true)
+		private String refNo;
+
+		@Column(name = "approver_id")
+		private Long approverId;
+	
+	
+		@Column(name = "draft_status", nullable = false)
+		private Boolean draftStatus;
+		
+		@ManyToOne(fetch = FetchType.LAZY)
+		@JoinColumn(name = "bulletin1_lok_sabha_no_fkey",  referencedColumnName = "id", insertable = false, updatable = false)
+		private MastersLokSabha lokSabhaDetails;
+	
+		@ManyToOne(fetch = FetchType.LAZY)
+		@JoinColumn(name = "bulletin1_lok_sabha_session_no_fkey",  referencedColumnName = "id", insertable = false, updatable = false)
+		private MastersLokSabhaSession lokSabhaSessionDetails; 
+	
+		@ManyToOne(fetch = FetchType.LAZY)
+		@JoinColumn(name = "bulletin1_rajya_sabha_session_no_fkey",  referencedColumnName = "id", insertable = false, updatable = false)
+		private MastersRajyaSabhaSession rajyaSabhaSessionDetails; 
+	
+		@ManyToOne
+        @JoinColumn(name = "bulletin1_approver_id_fkey", referencedColumnName = "id", insertable = false, updatable = false)
+        private BaseUser approverDetails;
+
+		@PrePersist
+		public void generateReferenceId() {
+			this.refNo = "BTN-"+UUID.randomUUID().toString();
+		}
+
+}
+
+	    
+	    

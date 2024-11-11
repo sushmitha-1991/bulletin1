@@ -1,0 +1,80 @@
+package com.dsp.bulletin1.entity;
+
+
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public abstract class Auditable {
+
+	
+	@CreatedDate
+	@Column(name = "created_at", updatable = false)
+	private LocalDateTime createdAt;
+
+	@LastModifiedDate
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
+
+	@CreatedBy
+	@Column(name = "created_by")
+	private Long createdBy;
+
+	@LastModifiedBy
+	@Column(name = "updated_by")
+	private Long updatedBy;
+
+	@Column(name = "is_active", nullable = false)
+	private Boolean isActive;
+
+	@Column(name = "is_deleted", nullable = false )
+	private Boolean isDeleted;
+
+	@PrePersist
+	public void prePersist() {
+		this.isActive = Boolean.TRUE;
+		this.isDeleted = Boolean.FALSE;
+		this.createdAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now();
+
+	}
+	@PreUpdate
+	public void preUpdate() {
+		this.isActive = Boolean.TRUE;
+		this.isDeleted = Boolean.FALSE;
+		this.updatedAt = LocalDateTime.now();
+	}
+
+    // @Autowired
+    // private RestTemplate restTemplate;
+    // private static final String SET_API_URL = "https://localhost:8887/setSession/1";
+	// public void setData() {
+    //      restTemplate.getForObject(SET_API_URL, none);
+    // }
+    // private static final String API_URL = "https://localhost:8887/getSessionId";
+
+    // public Long getData() {
+    //     Long response = restTemplate.getForObject(API_URL, Long.class);
+    //     return response;
+    // }
+	
+}
+
