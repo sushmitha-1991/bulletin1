@@ -2,7 +2,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY ./target/bulletin1.jar app.jar
+COPY ./target/bulletin1-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8886
 
