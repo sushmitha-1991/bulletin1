@@ -71,13 +71,6 @@ public class Bulletin1DocsController
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-// 	@DeleteMapping("delete/{id}")
-// 	public ResponseEntity<GenericResponse<Void>> deletebulletin1ById(@PathVariable Long id) {
-// 		service.deleteBulletin1ById(id);
-// GenericResponse<Void> response = new GenericResponse<>(HttpStatus.OK.value(), true,
-// 				"Bulletin1 Details deleted successfully.", null);
-// 		return new ResponseEntity<>(response, HttpStatus.OK);
-// 	}
 	
 }
 
