@@ -36,7 +36,9 @@ import lombok.NoArgsConstructor;
 		@Id
 		@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bulletin1_details_seq")
 		@SequenceGenerator(name = "bulletin1_details_seq", sequenceName = "         bulletin1_details_seq", allocationSize = 1)
-		private Long id; 
+		private Long id;
+		@Column(name = "bulletin_no", nullable = false)
+		private Long bulletinNo;
 
 		@Column(name = "bulletin_date", nullable = false)
 		private LocalDate bulletinDate;
@@ -82,9 +84,10 @@ import lombok.NoArgsConstructor;
         @JoinColumn(name = "approver_details", referencedColumnName = "id", insertable = false, updatable = false)
         private BaseUser approverDetails;
 
+		
 		@PrePersist
 		public void generateReferenceId() {
-			this.refNo = "BTN-"+UUID.randomUUID().toString();
+			this.refNo = "B1LS"+lokSabhaNo+lokSabhaSessionNo+id;
 		}
 
 }

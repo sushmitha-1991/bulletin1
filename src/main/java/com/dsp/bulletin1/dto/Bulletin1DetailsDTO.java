@@ -21,10 +21,13 @@ import lombok.Setter;
 public class Bulletin1DetailsDTO {
     @NotEmpty
     private Long id;
+    @NotEmpty
+    private Long bulletinNo;
 	@NotEmpty
     private LocalDate bulletinDate;
     private String bulletinDateHindi;
     private Long lokSabhaNo;
+
     private Long lokSabhaSessionNo;
     private Long rajyaSabhaSessionNo;
     @NotEmpty

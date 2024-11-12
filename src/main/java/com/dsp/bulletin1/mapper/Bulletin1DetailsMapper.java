@@ -6,6 +6,7 @@ public  class Bulletin1DetailsMapper {
     public static Bulletin1DetailsDTO toDTO(Bulletin1Details entity) {
     	Bulletin1DetailsDTO dto = new Bulletin1DetailsDTO();
             dto.setId(entity.getId());
+            dto.setBulletinNo(entity.getBulletinNo());
             dto.setBulletinDate(entity.getBulletinDate());
             dto.setBulletinDateHindi(entity.getBulletinDateHindi());
             dto.setDraftStatus(entity.getDraftStatus());
@@ -20,6 +21,7 @@ public  class Bulletin1DetailsMapper {
         public static Bulletin1Details toEntity(Bulletin1DetailsDTO dto) {
             Bulletin1Details entity = new Bulletin1Details();
             entity.setId(dto.getId());
+            entity.setBulletinNo(dto.getBulletinNo());
             entity.setBulletinDate(dto.getBulletinDate());
             entity.setBulletinDateHindi(dto.getBulletinDateHindi());
             entity.setDraftStatus(dto.getDraftStatus());
