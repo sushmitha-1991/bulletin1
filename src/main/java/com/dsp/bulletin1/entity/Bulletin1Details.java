@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 	{  
 		@Id
 		@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bulletin1_details_seq")
-		@SequenceGenerator(name = "bulletin1_details_seq", sequenceName = "bulletin1_details_seq", allocationSize = 1)
+		@SequenceGenerator(name = "bulletin1_details_seq", sequenceName = "         bulletin1_details_seq", allocationSize = 1)
 		private Long id; 
 
 		@Column(name = "bulletin_date", nullable = false)
@@ -67,19 +67,19 @@ import lombok.NoArgsConstructor;
 		private Boolean draftStatus;
 		
 		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name = "bulletin1_lok_sabha_no_fkey",  referencedColumnName = "id", insertable = false, updatable = false)
+		@JoinColumn(name = "lok_sabha_details",  referencedColumnName = "id", insertable = false, updatable = false)
 		private MastersLokSabha lokSabhaDetails;
 	
 		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name = "bulletin1_lok_sabha_session_no_fkey",  referencedColumnName = "id", insertable = false, updatable = false)
+		@JoinColumn(name = "lok_sabha_session_details",  referencedColumnName = "id", insertable = false, updatable = false)
 		private MastersLokSabhaSession lokSabhaSessionDetails; 
 	
 		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name = "bulletin1_rajya_sabha_session_no_fkey",  referencedColumnName = "id", insertable = false, updatable = false)
+		@JoinColumn(name = "rajya_sabha_session_details",  referencedColumnName = "id", insertable = false, updatable = false)
 		private MastersRajyaSabhaSession rajyaSabhaSessionDetails; 
 	
 		@ManyToOne
-        @JoinColumn(name = "bulletin1_approver_id_fkey", referencedColumnName = "id", insertable = false, updatable = false)
+        @JoinColumn(name = "approver_details", referencedColumnName = "id", insertable = false, updatable = false)
         private BaseUser approverDetails;
 
 		@PrePersist

@@ -58,6 +58,7 @@ public class Bulletin1DetailsController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	@GetMapping("/findByLokSabhaNo/{sessionNo}")
+	
     public List<Bulletin1DetailsDTO> findByLokSabhaSessionNo(@PathVariable Long sessionNo) {
         return service.getByLokSabhaSessionNo(sessionNo);
     }
@@ -93,36 +94,28 @@ public class Bulletin1DetailsController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/setSession/{id}")
-	public ResponseEntity<String> setSessionId(@PathVariable Long id,HttpSession session) 
-	{
-        if (id != null) {
-            service.setSessionId(id,session);
-            return ResponseEntity.ok("User ID " + id + " set in session.");
-        } else {
-            LOGGER.warn("Attempted to set null User ID in session.");
-            return ResponseEntity.badRequest().body("Invalid User ID.");
-		}
-    }
-	@GetMapping("/getSessionId")
-    public String getSessionId(HttpSession session) {
-        Long userId = service.getSessionId(session);
-        if (userId != null) {
-            return "Session ID is: " + userId;
-        } else {
-            return "No Session ID found.";
-        }
-    }
+	// @GetMapping("/setSession/{id}")
+	// public ResponseEntity<String> setSessionId(@PathVariable Long id,HttpSession session) 
+	// {
+    //     if (id != null) {
+    //         service.setSessionId(id,session);
+    //         return ResponseEntity.ok("User ID " + id + " set in session.");
+    //     } else {
+    //         LOGGER.warn("Attempted to set null User ID in session.");
+    //         return ResponseEntity.badRequest().body("Invalid User ID.");
+	// 	}
+    // }
+	// @GetMapping("/getSessionId")
+    // public String getSessionId(HttpSession session) {
+    //     Long userId = service.getSessionId(session);
+    //     if (userId != null) {
+    //         return "Session ID is: " + userId;
+    //     } else {
+    //         return "No Session ID found.";
+    //     }
+    // }
 	
-	@GetMapping("/getAll/inactive")
-    public List<Bulletin1DetailsDTO> getAllInactive() {
-        return service.getAllInactive();
-    }
-
-	@GetMapping("/getAll/active")
-    public List<Bulletin1DetailsDTO> getAllActive() {
-        return service.getAllActive();
-    }
+	
 }
 
 

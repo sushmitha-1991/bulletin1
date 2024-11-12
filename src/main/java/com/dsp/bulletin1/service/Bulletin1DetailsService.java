@@ -25,10 +25,6 @@ public interface Bulletin1DetailsService {
 
         void setSessionId(Long id,HttpSession session);
         
-        List<Bulletin1DetailsDTO> getAllInactive();
-
-        List<Bulletin1DetailsDTO> getAllActive();
-        
         List<Bulletin1DetailsDTO> getByLokSabhaSessionNo(Long lokSabhaNo);			
 
 }

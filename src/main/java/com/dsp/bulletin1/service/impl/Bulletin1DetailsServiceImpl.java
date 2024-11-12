@@ -1,12 +1,10 @@
 package com.dsp.bulletin1.service.impl;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.dsp.bulletin1.dto.ApproverDTO;
@@ -15,7 +13,6 @@ import com.dsp.bulletin1.dto.MastersLokSabhaDTO;
 import com.dsp.bulletin1.dto.MastersLokSabhaSessionDTO;
 import com.dsp.bulletin1.dto.MastersRajyaSabhaSessionDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
-import com.dsp.bulletin1.entity.entitySpecification.Bulletin1DetailsSpec;
 import com.dsp.bulletin1.exception.UserNotFoundException;
 import com.dsp.bulletin1.mapper.ApproverMapper;
 import com.dsp.bulletin1.mapper.Bulletin1DetailsMapper;
@@ -176,54 +173,6 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             LOGGER.warn("Attempted to set a null user ID in session.");
         }
     }
-
-@Override
-    public List<Bulletin1DetailsDTO> getAllInactive() {
-        Specification<Bulletin1Details> isActiveSpec = Bulletin1DetailsSpec.isActive(false);
-        List<Bulletin1Details> inactiveEntities = bulletin1Repository.findAll(isActiveSpec);
-        return inactiveEntities.stream()
-		.map(Bulletin1DetailsMapper::toDTO)
-		.collect(Collectors.toList());
-    }
-	@Override
-    public List<Bulletin1DetailsDTO> getAllActive() {
-        Specification<Bulletin1Details> isActiveSpec = Bulletin1DetailsSpec.isActive(true);
-        
-        List<Bulletin1Details> activeEntities = bulletin1Repository.findAll(isActiveSpec);
-        List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
-        for (Bulletin1Details entity : bulletin1Repository.findAll()) 
-        {
-
-            Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity); 
-            
-            if(entity.getLokSabhaSessionNo()!=null)
-            {
-                MastersLokSabhaSessionDTO lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
-                dto.setLokSabhaSessionDetails(lokSabhaSession);
-            }
-            if(entity.getLokSabhaNo()!=null)
-            {
-                MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
-                dto.setLokSabhaDetails(lokSabha);
-            }
-            if(entity.getRajyaSabhaSessionNo()!=null)
-            {
-                MastersRajyaSabhaSessionDTO rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
-                dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
-            }
-            if(entity.getApproverId()!=null)
-            {
-                ApproverDTO approver=getApproverDetails(entity.getApproverId());
-                dto.setApproverDetails(approver); 
-            
-            }
-        dtoList.add(dto);
-        }
-
-        return activeEntities.stream()
-		.map(Bulletin1DetailsMapper::toDTO)
-		.collect(Collectors.toList());
-    }
     private void validateRequiredFields(Bulletin1DetailsDTO bulletin1DTO) {
         if (bulletin1DTO.getLokSabhaNo() == null) {
             throw new IllegalArgumentException("Lok Sabha No is required for finalization.");
@@ -231,9 +180,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         if (bulletin1DTO.getLokSabhaSessionNo() == null) {
             throw new IllegalArgumentException("Session No is required for finalization.");
         }
-        // Add more validation for required fields if necessary.
     }
-
        
     public List<Bulletin1DetailsDTO> getByLokSabhaSessionNo(Long lokSabhaSessionNo) {
         List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
