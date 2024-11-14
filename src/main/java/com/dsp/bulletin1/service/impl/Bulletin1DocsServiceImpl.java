@@ -58,6 +58,7 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
 	public Bulletin1DocsDTO updateBulletin1(Long id, Bulletin1DocsDTO bulletin1DTO) {
 		Bulletin1Docs existingBulletin1 = bulletin1Repository.findById(id)
         .orElseThrow(() -> new UserNotFoundException("Bulletin1 Docs not found with ID: " + id));
+        
 		Bulletin1Docs updatedBulletin1= Bulletin1DocsMapper.toEntity(bulletin1DTO);
 		updatedBulletin1.setId(existingBulletin1.getId());
 		bulletin1Repository.save(updatedBulletin1);
