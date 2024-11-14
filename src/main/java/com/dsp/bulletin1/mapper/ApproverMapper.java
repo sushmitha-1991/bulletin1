@@ -9,13 +9,15 @@ public class ApproverMapper {
             ApproverDTO dto = new ApproverDTO();
                dto.setId(entity.getId());
                dto.setUsername(entity.getUsername());
+               dto.setRole(entity.getRole());
                 return dto;
             }
         
             public static BaseUser toEntity(ApproverDTO dto) {
                 BaseUser entity = new BaseUser();
                 entity.setId(dto.getId());
-                entity.setUsername(dto.getUsername());            
+                entity.setUsername(dto.getUsername());   
+                entity.setRole(dto.getRole());         
                 return entity;
         }
     }

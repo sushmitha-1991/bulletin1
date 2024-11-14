@@ -1,15 +1,7 @@
 package com.dsp.bulletin1.dto;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
-import com.dsp.bulletin1.entity.Bulletin1Details;
-import com.dsp.bulletin1.entity.MasterCode;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,9 +26,9 @@ public class Bulletin1DocsDTO
     @NotEmpty
     private Long refDocId;
     @NotEmpty
-    private Long bulletinId;
+    private Long bulletin1Id;
     private MasterCodeDTO codes;
-    private Bulletin1DetailsDTO bulletin1Details;
+    private BulletinDTO bulletin1Details;
 	}
 
     

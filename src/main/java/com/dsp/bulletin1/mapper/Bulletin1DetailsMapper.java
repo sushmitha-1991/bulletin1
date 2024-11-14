@@ -15,6 +15,7 @@ public  class Bulletin1DetailsMapper {
             dto.setLokSabhaSessionNo(entity.getLokSabhaSessionNo());
             dto.setRajyaSabhaSessionNo(entity.getRajyaSabhaSessionNo());  
             dto.setBulletin1Content(entity.getBulletin1Content());
+            dto.setFootNotes(entity.getFootNotes());
             return dto;
         }
     
@@ -30,6 +31,7 @@ public  class Bulletin1DetailsMapper {
             entity.setLokSabhaSessionNo(dto.getLokSabhaSessionNo());
             entity.setRajyaSabhaSessionNo(dto.getRajyaSabhaSessionNo()); 
             entity.setBulletin1Content(dto.getBulletin1Content()); 
+            entity.setFootNotes(dto.getFootNotes());
             return entity;
     }
 }

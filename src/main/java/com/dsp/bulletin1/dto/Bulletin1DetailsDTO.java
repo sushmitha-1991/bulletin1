@@ -1,6 +1,8 @@
 package com.dsp.bulletin1.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -37,6 +39,7 @@ public class Bulletin1DetailsDTO {
     private Long approverId;
 	@NotEmpty
     private Boolean draftStatus;
+    private List<Map<String, Object>> footNotes;
     private MastersLokSabhaDTO lokSabhaDetails;
     private MastersRajyaSabhaSessionDTO rajyaSabhaSessionDetails;
     private MastersLokSabhaSessionDTO lokSabhaSessionDetails;

@@ -26,9 +26,15 @@ import lombok.NoArgsConstructor;
         private Long id;
     
     
-        @Column(name = "abbr", length = 50,  nullable = false)
+        @Column(name = "abbr", length = 250)
         private String abbr;
     
+        @Column(name = "code", length = 50)
+        private String code;
+    
+    
+        @Column(name = "description", length = 50)
+        private String description;
     
     
     }

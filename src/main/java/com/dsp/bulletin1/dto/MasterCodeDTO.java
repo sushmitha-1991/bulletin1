@@ -21,19 +21,8 @@ import lombok.Setter;
         private Long id;
         @NotEmpty
         private String abbr;
-        // @NotEmpty
-        
-        // @NotEmpty
-        // private Long codeTypeId;
-    
-        // @NotEmpty
-        // private String code;
-    
-       
-    
-        // private String description;    
-        // @NotEmpty
-        // private Long createdBy;
+        private String code;
+        private String description;    
         }
     
         

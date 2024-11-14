@@ -43,7 +43,7 @@ public class Bulletin1DetailsController {
 		System.out.println(bulletin1DTO);
 		if(bulletin1DTO.getRefNo()==null)
 		{
-			String refNo="BTN-"+(UUID.randomUUID().toString());
+			String refNo="BTN"+bulletin1DTO.getLokSabhaNo()+bulletin1DTO.getLokSabhaSessionNo()+bulletin1DTO.getId();
 			bulletin1DTO.setRefNo(refNo);
 		}
 		if(bulletin1DTO.getDraftStatus()==null)
@@ -65,7 +65,17 @@ public class Bulletin1DetailsController {
 	@PutMapping("update/{id}")
 	public ResponseEntity<GenericResponse<Bulletin1DetailsDTO>> updateBulletin1(@PathVariable Long id,
 			@RequestBody Bulletin1DetailsDTO bulletin1DTO) {
+				if(bulletin1DTO.getRefNo()==null)
+				{
+					String refNo="BTN"+bulletin1DTO.getLokSabhaNo()+bulletin1DTO.getLokSabhaSessionNo()+bulletin1DTO.getId();
+					bulletin1DTO.setRefNo(refNo);
+				}
+				if(bulletin1DTO.getDraftStatus()==null)
+				{
+					bulletin1DTO.setDraftStatus(false);
+				}
 				Bulletin1DetailsDTO updatedbulletin1DTO = service.updateBulletin1(id,bulletin1DTO );
+				System.out.println(updatedbulletin1DTO);
 		GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
 				"Bulletin1 Details updated successfully.", updatedbulletin1DTO);
 		return new ResponseEntity<>(response, HttpStatus.OK);

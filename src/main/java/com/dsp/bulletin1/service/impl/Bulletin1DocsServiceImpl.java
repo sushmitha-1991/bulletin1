@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import com.dsp.bulletin1.dto.ApproverDTO;
 import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
 import com.dsp.bulletin1.dto.Bulletin1DocsDTO;
+import com.dsp.bulletin1.dto.BulletinDTO;
 import com.dsp.bulletin1.dto.MasterCodeDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
 import com.dsp.bulletin1.entity.Bulletin1Docs;
@@ -18,6 +19,7 @@ import com.dsp.bulletin1.mapper.ApproverMapper;
 import com.dsp.bulletin1.mapper.Bulletin1DetailsMapper;
 import com.dsp.bulletin1.mapper.Bulletin1DocsMapper;
 import com.dsp.bulletin1.mapper.CodeMapper;
+import com.dsp.bulletin1.mapper.GetBulletinMapper;
 import com.dsp.bulletin1.repository.Bulletin1DetailsRepository;
 import com.dsp.bulletin1.repository.Bulletin1DocsRepository;
 import com.dsp.bulletin1.repository.MasterCodeRepository;
@@ -45,7 +47,8 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
 
 	@Override
 	public Bulletin1DocsDTO createBulletin1(Bulletin1DocsDTO bulletin1DTO) {
-        
+        System.out.println("dddddddddddd");
+        System.out.println(bulletin1DTO);
 		Bulletin1Docs Bulletin1Docs = Bulletin1DocsMapper.toEntity(bulletin1DTO);
         
 		Bulletin1Docs = bulletin1Repository.save(Bulletin1Docs);
@@ -65,6 +68,11 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
         Bulletin1Docs entity = bulletin1Repository.findById(id)
         .orElseThrow(() -> new UserNotFoundException("Bulletin1 Docs  not found with ID: " + id));
         Bulletin1DocsDTO dto = Bulletin1DocsMapper.toDTO(entity); 
+        if(entity.getBulletin1Id()!=null)
+            {
+                BulletinDTO bulletin=getBulletin1Details(entity.getBulletin1Id());
+                dto.setBulletin1Details(bulletin); 
+            }
         if(entity.getRefDocId()!=null)
             {
                 MasterCodeDTO codes=getCodeDetails(entity.getRefDocId());
@@ -79,11 +87,12 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
         List<Bulletin1DocsDTO> dtoList = new ArrayList<>();
         for (Bulletin1Docs entity : bulletin1Repository.findAll()) 
         {
+
             Bulletin1DocsDTO dto = Bulletin1DocsMapper.toDTO(entity); 
 
-            if(entity.getBulletinId()!=null)
+            if(entity.getBulletin1Id()!=null)
             {
-                Bulletin1DetailsDTO bulletin=getBulletin1Details(entity.getBulletinId());
+                BulletinDTO bulletin=getBulletin1Details(entity.getBulletin1Id());
                 dto.setBulletin1Details(bulletin); 
             }  
             if(entity.getRefDocId()!=null)
@@ -100,11 +109,11 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
             .map(CodeMapper::toDTO)  // Convert to DTO
             .orElse(null);  // Return null if not found
     }
-    public Bulletin1DetailsDTO getBulletin1Details(Long id) {
+    public BulletinDTO getBulletin1Details(Long id) {
 
         Bulletin1Details entity = bulletin1DetailsRepository.findById(id)
         .orElseThrow(() -> new UserNotFoundException("Bulletin1 Docs  not found with ID: " + id));
-        Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);
+        BulletinDTO dto = GetBulletinMapper.toDTO(entity);
         return dto;
     
     }

@@ -8,9 +8,9 @@ public  class CodeMapper {
     public static MasterCodeDTO toDTO(MasterCode entity) {
     	MasterCodeDTO dto = new MasterCodeDTO();
             dto.setId(entity.getId());
-            // dto.setDescription(entity.getDescription());
+            dto.setDescription(entity.getDescription());
             dto.setAbbr(entity.getAbbr());
-            // dto.setCode(entity.getCode());
+            dto.setCode(entity.getCode());
             // dto.setCodeTypeId(entity.getCodeTypeId());
             // dto.setCreatedBy(entity.getCreatedBy());
             return dto;
@@ -20,9 +20,9 @@ public  class CodeMapper {
             MasterCode entity = new MasterCode();
            
             entity.setId(dto.getId());
-            // entity.setDescription(dto.getDescription());
+            entity.setDescription(dto.getDescription());
             entity.setAbbr(dto.getAbbr());
-            // entity.setCode(dto.getCode());
+            entity.setCode(dto.getCode());
             // entity.setCodeTypeId(dto.getCodeTypeId());
             // entity.setCreatedBy(dto.getCreatedBy());           
              return entity;

@@ -9,7 +9,7 @@ public class Bulletin1DocsMapper {
     public static Bulletin1DocsDTO toDTO(Bulletin1Docs entity) {
         Bulletin1DocsDTO dto = new Bulletin1DocsDTO();
         dto.setId(entity.getId());
-        dto.setBulletinId(entity.getBulletinId());
+        dto.setBulletin1Id(entity.getBulletin1Id());
         dto.setRefDocDate(entity.getRefDocDate());
         dto.setRefDocId(entity.getRefDocId());
         return dto;
@@ -19,7 +19,7 @@ public class Bulletin1DocsMapper {
     public static Bulletin1Docs toEntity(Bulletin1DocsDTO dto) {
     	Bulletin1Docs entity = new Bulletin1Docs();
         entity.setId(dto.getId());
-        entity.setBulletinId(dto.getBulletinId());
+        entity.setBulletin1Id(dto.getBulletin1Id());
         entity.setRefDocDate(dto.getRefDocDate());
         entity.setRefDocId(dto.getRefDocId());    
         return entity;

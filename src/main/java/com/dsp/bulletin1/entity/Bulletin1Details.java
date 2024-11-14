@@ -1,12 +1,11 @@
 package com.dsp.bulletin1.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import com.dsp.bulletin1.dto.MastersRajyaSabhaSessionDTO;
+import java.util.List;
+import java.util.Map;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +16,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,10 +62,13 @@ import lombok.NoArgsConstructor;
 		@Column(name = "approver_id")
 		private Long approverId;
 	
-	
 		@Column(name = "draft_status", nullable = false)
 		private Boolean draftStatus;
 		
+		@Convert(converter = JsonConverter.class)
+    	@Column(name = "foot_notes", columnDefinition = "jsonb")
+		private List<Map<String, Object>> footNotes;
+
 		@ManyToOne(fetch = FetchType.LAZY)
 		@JoinColumn(name = "lok_sabha_details",  referencedColumnName = "id", insertable = false, updatable = false)
 		private MastersLokSabha lokSabhaDetails;
@@ -80,7 +81,7 @@ import lombok.NoArgsConstructor;
 		@JoinColumn(name = "rajya_sabha_session_details",  referencedColumnName = "id", insertable = false, updatable = false)
 		private MastersRajyaSabhaSession rajyaSabhaSessionDetails; 
 	
-		@ManyToOne
+		@ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "approver_details", referencedColumnName = "id", insertable = false, updatable = false)
         private BaseUser approverDetails;
 

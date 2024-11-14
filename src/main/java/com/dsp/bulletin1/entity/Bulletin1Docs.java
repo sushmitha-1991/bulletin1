@@ -36,7 +36,7 @@ import lombok.Setter;
 		@Column(name = "ref_doc_id",nullable = false)
         private Long refDocId;
         @Column(name = "bulletin1_id", nullable = false)
-        private Long bulletinId;
+        private Long bulletin1Id;
 		@ManyToOne(fetch = FetchType.LAZY)
 		@JoinColumn(name = "master_codes",  referencedColumnName = "id", insertable = false, updatable = false)
 		private MasterCode codes;
