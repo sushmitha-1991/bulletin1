@@ -1,18 +1,23 @@
 package com.dsp.bulletin1.service.impl;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.dsp.bulletin1.dto.ApplicationDTO;
 import com.dsp.bulletin1.dto.ApproverDTO;
 import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
 import com.dsp.bulletin1.dto.MastersLokSabhaDTO;
 import com.dsp.bulletin1.dto.MastersLokSabhaSessionDTO;
 import com.dsp.bulletin1.dto.MastersRajyaSabhaSessionDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
+import com.dsp.bulletin1.entity.specification.Bulletin1Spec;
 import com.dsp.bulletin1.exception.UserNotFoundException;
 import com.dsp.bulletin1.mapper.ApproverMapper;
 import com.dsp.bulletin1.mapper.Bulletin1DetailsMapper;
@@ -26,6 +31,7 @@ import com.dsp.bulletin1.repository.MastersRSSRepository;
 import com.dsp.bulletin1.repository.MyUserRepository;
 import com.dsp.bulletin1.service.Bulletin1DetailsService;
 
+import ch.qos.logback.core.joran.conditional.ElseAction;
 import jakarta.servlet.http.HttpSession;
 @Service
 public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
@@ -51,14 +57,30 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 
 	@Override
 	public Bulletin1DetailsDTO createBulletin1(Bulletin1DetailsDTO bulletin1DTO) {
-        
+		if(bulletin1DTO.getRefNo()==null)
+		{
+			String refNo="BTN"+bulletin1DTO.getLokSabhaNo()+bulletin1DTO.getLokSabhaSessionNo()+bulletin1DTO.getId();
+			bulletin1DTO.setRefNo(refNo);
+		}
+        if(bulletin1DTO.getDraftStatus()==null)
+		{
+			bulletin1DTO.setDraftStatus(false);
+		}
 		Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
-        
 		bulletin1Details = bulletin1Repository.save(bulletin1Details);
 		return Bulletin1DetailsMapper.toDTO(bulletin1Details);
 	}
 	@Override
 	public Bulletin1DetailsDTO updateBulletin1(Long id, Bulletin1DetailsDTO bulletin1DTO) {
+        if(bulletin1DTO.getRefNo()==null)
+		{
+			String refNo="BTN"+bulletin1DTO.getLokSabhaNo()+bulletin1DTO.getLokSabhaSessionNo()+bulletin1DTO.getId();
+			bulletin1DTO.setRefNo(refNo);
+		}
+        if(bulletin1DTO.getDraftStatus()==null)
+		{
+			bulletin1DTO.setDraftStatus(false);
+		}
 		Bulletin1Details existingBulletin1 = bulletin1Repository.findById(id)
         .orElseThrow(() -> new UserNotFoundException("Bulletin1 Details not found with ID: " + id));;
 		Bulletin1Details updatedBulletin1= Bulletin1DetailsMapper.toEntity(bulletin1DTO);
@@ -182,37 +204,263 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         }
     }
        
-    public List<Bulletin1DetailsDTO> getByLokSabhaSessionNo(Long lokSabhaSessionNo) {
-        List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
-        for (Bulletin1Details entity : bulletin1Repository.findByLokSabhaSessionNo(lokSabhaSessionNo)) 
-        {
-            Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);    
-            if(entity.getLokSabhaSessionNo()!=null)
-            {
-                MastersLokSabhaSessionDTO lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
-                dto.setLokSabhaSessionDetails(lokSabhaSession);
-            }
-            if(entity.getLokSabhaNo()!=null)
-            {
-                MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
-                dto.setLokSabhaDetails(lokSabha);
-            }
-            if(entity.getRajyaSabhaSessionNo()!=null)
-            {
-                MastersRajyaSabhaSessionDTO rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
-                dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
-            }
-            if(entity.getApproverId()!=null)
-            {
-                ApproverDTO approver=getApproverDetails(entity.getApproverId());
-                dto.setApproverDetails(approver); 
+    // public List<Bulletin1DetailsDTO> getByLokSabhaSessionNo(Long lokSabhaSessionNo) {
+    //     List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
+    //     for (Bulletin1Details entity : bulletin1Repository.findByLokSabhaSessionNo(lokSabhaSessionNo)) 
+    //     {
+    //         Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);    
+    //         if(entity.getLokSabhaSessionNo()!=null)
+    //         {
+    //             MastersLokSabhaSessionDTO lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
+    //             dto.setLokSabhaSessionDetails(lokSabhaSession);
+    //         }
+    //         if(entity.getLokSabhaNo()!=null)
+    //         {
+    //             MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
+    //             dto.setLokSabhaDetails(lokSabha);
+    //         }
+    //         if(entity.getRajyaSabhaSessionNo()!=null)
+    //         {
+    //             MastersRajyaSabhaSessionDTO rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
+    //             dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
+    //         }
+    //         if(entity.getApproverId()!=null)
+    //         {
+    //             ApproverDTO approver=getApproverDetails(entity.getApproverId());
+    //             dto.setApproverDetails(approver); 
             
-            }
-            dtoList.add(dto);
+    //         }
+    //         dtoList.add(dto);
     
+    //         }
+    //         return dtoList;
+    // }
+
+
+    // @Override
+    // public List<Bulletin1DetailsDTO> getAllBulletin1Details(Long sessionNo, Long lokSabhaNo,Long rajyaShabhaSession, Boolean draftStatus) {
+    // List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
+    // List<Bulletin1Details> entitys;
+    // if(draftStatus==null)
+    //     {
+    //         draftStatus=false;
+    //     }
+    //     // if(lokSabhaNo==null)
+    //     // {
+    //     //     sessionNo=2l;
+    //     //     lokSabhaNo=1l;
+    //     // }
+    //     // if(rajyaShabhaSession==null)
+    //     // {
+    //     //     rajyaShabhaSession=1l;
+    //     // }
+    //     if(lokSabhaNo!=null)
+    //     {
+    //         if(sessionNo==null)
+    //         {
+    //     entitys = bulletin1Repository.findByLokSabhaNo(lokSabhaNo, draftStatus);
+    //         }
+    //         else{
+
+    //         }
+    //     }
+    //     if (lokSabhaNo!=null && sessionNo != null) 
+    //     {
+    //         // entitys = bulletin1Repository.findByLokSabhaSessionNoAndDraftStatus(sessionNo, lokSabhaNo, draftStatus);
+    //     } 
+    //     if(rajyaShabhaSession!=null)
+    //     {
+    //         entitys = bulletin1Repository.findByRajyaSabhaSessionNoAndDraftStatus(rajyaShabhaSession, draftStatus);
+
+    //     }
+    //     // else if (lokSabhaNo!=null && sessionNo != null) {
+    //     //     entitys = bulletin1Repository.findByLokSabhaSession(sessionNo, lokSabhaNo);
+    //     // } else if (rajyaShabhaSession != null) {
+    //     //     entitys = bulletin1Repository.findByRajyaSabhaSession(rajyaShabhaSession);
+    //     // } else if(draftStatus!=null)
+    //     // {
+    //     //     entitys = bulletin1Repository.findBydraftStatus(draftStatus);
+    //     // } 
+    //     else
+    //      {
+    //         draftStatus=false;
+    //         entitys = bulletin1Repository.findBydraftStatus(draftStatus);
+    //      }
+    //     for (Bulletin1Details entity : entitys ) 
+    //     {
+    //         Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity); 
+
+    //         if(entity.getLokSabhaSessionNo()!=null)
+    //         {
+    //             MastersLokSabhaSessionDTO lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
+    //             dto.setLokSabhaSessionDetails(lokSabhaSession);
+    //         }
+    //         if(entity.getLokSabhaNo()!=null)
+    //         {
+    //             MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
+    //             dto.setLokSabhaDetails(lokSabha);
+    //         }
+    //         if(entity.getRajyaSabhaSessionNo()!=null)
+    //         {
+    //             MastersRajyaSabhaSessionDTO rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
+    //             dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
+    //         }
+    //         if(entity.getApproverId()!=null)
+    //         {
+    //             ApproverDTO approver=getApproverDetails(entity.getApproverId());
+    //             dto.setApproverDetails(approver); 
+    //         }  
+    //         dtoList.add(dto);    
+    //     }
+    //     return dtoList;
+    // }
+
+    @Override
+    public List<Bulletin1DetailsDTO> getBulletin1s(Boolean isActive, Boolean draftStatus,Long lokSabhaNo,
+     Long lokSabhaSessionNo, Long rajyaSabhaSessionNo,LocalDate startDate,LocalDate endDate) 
+    {
+    List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
+    List<Bulletin1Details> entitys;
+        if(draftStatus==null)
+        {
+            draftStatus=false;
+        }
+        if(isActive==null)
+        {
+            isActive=true;
+        }
+        // if(rajyaSabhaSessionNo==null)
+        // {
+            // rajyaSabhaSessionNo=getCurrentRajyaSabhaSession();
+        // }
+        // if(lokSabhaSessionNo==null)
+        // {
+        //     lokSabhaSessionNo=getCurrentLokSabhaSession();
+        // }
+        if(startDate!=null || endDate!=null) 
+        {
+            if(lokSabhaNo!=null && lokSabhaSessionNo!=null)
+            {
+            entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+            .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+            .and(Bulletin1Spec.hasDateBetween(startDate, endDate))
+            .and(Bulletin1Spec.hasLokSabhaNo(lokSabhaNo))
+            .and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo))).stream()
+            .collect(Collectors.toList());
             }
-            return dtoList;
+            else if(lokSabhaNo==null && lokSabhaSessionNo!=null)
+            { 
+                entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+                .and(Bulletin1Spec.hasDateBetween(startDate, endDate))
+                .and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo))).stream()
+                .collect(Collectors.toList());
+            }
+            else if(lokSabhaSessionNo==null && lokSabhaNo!=null)
+            {
+
+                entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+                .and(Bulletin1Spec.hasDateBetween(startDate, endDate))
+                .and(Bulletin1Spec.hasLokSabhaNo(lokSabhaNo))
+                // .and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo))
+                ).stream()
+                .collect(Collectors.toList());
+
+            }
+            else
+            {
+                if(rajyaSabhaSessionNo!=null)
+                {
+                    entitys= bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                    .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+                    .and(Bulletin1Spec.hasDateBetween(startDate, endDate))
+                    .and(Bulletin1Spec.hasRajyaSabhaSessionNo(rajyaSabhaSessionNo))).stream()
+                    .collect(Collectors.toList());
+                }
+                else
+                {
+                    entitys= bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                    .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+                    .and(Bulletin1Spec.hasDateBetween(startDate, endDate))
+                    ).stream().collect(Collectors.toList());
+                }
+            }
+            
+        }
+        else{
+            if(lokSabhaNo!=null && lokSabhaSessionNo!=null)
+            {
+            entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+            .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+            .and(Bulletin1Spec.hasDateBetween(startDate, endDate))
+            .and(Bulletin1Spec.hasLokSabhaNo(lokSabhaNo))
+            .and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo))).stream()
+            .collect(Collectors.toList());
+            }
+            else if(lokSabhaNo==null && lokSabhaSessionNo!=null)
+            { 
+                entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+                .and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo))).stream()
+                .collect(Collectors.toList());
+            }
+            else if(lokSabhaSessionNo==null && lokSabhaNo!=null)
+            {
+                System.out.println("fffffffff");
+                System.out.println(lokSabhaNo);
+                System.out.println("sssssssssssss");
+                System.out.println(lokSabhaSessionNo);
+                entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+                .and(Bulletin1Spec.hasLokSabhaNo(lokSabhaNo))
+                // .and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo))
+                ).stream()
+                .collect(Collectors.toList());
+                System.out.println("ffffffffffffff");
+                System.out.println(entitys);
+            }
+            else
+            {
+                if(rajyaSabhaSessionNo!=null)
+                {
+                    entitys= bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                    .and(Bulletin1Spec.hasDraftStatus(draftStatus))
+                    .and(Bulletin1Spec.hasRajyaSabhaSessionNo(rajyaSabhaSessionNo))).stream()
+                    .collect(Collectors.toList());
+                }
+                else
+                {
+                    entitys= bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
+                    .and(Bulletin1Spec.hasDraftStatus(draftStatus))).stream().collect(Collectors.toList());
+                }
+            }
+            
+        }
+    for (Bulletin1Details entity : entitys) 
+    {
+    Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);         
+    if(entity.getLokSabhaSessionNo()!=null)
+    {
+        MastersLokSabhaSessionDTO lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
+        dto.setLokSabhaSessionDetails(lokSabhaSession);  
     }
+    if(entity.getLokSabhaNo()!=null)
+    {
+    MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
+    dto.setLokSabhaDetails(lokSabha);
+    }  
+
+    dtoList.add(dto);
+    }
+    return dtoList;
+}
+// private Long getCurrentLokSabhaSession() {
+// // TODO Auto-generated method stub
+// throw new UnsupportedOperationException("Unimplemented method 'getCurrentRajyaSabhaSession'");
+// }
+   
+
 }
 
 

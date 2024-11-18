@@ -56,7 +56,7 @@ import lombok.NoArgsConstructor;
 		@Column(name = "bulletin1_content", length = 1024)
 		private String bulletin1Content;
 
-		@Column(name = "ref_no",nullable = false,length = 1024,unique = true)
+		@Column(name = "ref_no", nullable = false, unique = true)
 		private String refNo;
 
 		@Column(name = "approver_id")

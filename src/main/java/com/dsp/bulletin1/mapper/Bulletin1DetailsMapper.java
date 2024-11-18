@@ -16,6 +16,7 @@ public  class Bulletin1DetailsMapper {
             dto.setRajyaSabhaSessionNo(entity.getRajyaSabhaSessionNo());  
             dto.setBulletin1Content(entity.getBulletin1Content());
             dto.setFootNotes(entity.getFootNotes());
+            dto.setRefNo(entity.getRefNo());
             return dto;
         }
     
@@ -32,6 +33,7 @@ public  class Bulletin1DetailsMapper {
             entity.setRajyaSabhaSessionNo(dto.getRajyaSabhaSessionNo()); 
             entity.setBulletin1Content(dto.getBulletin1Content()); 
             entity.setFootNotes(dto.getFootNotes());
+            entity.setRefNo(dto.getRefNo());
             return entity;
     }
 }

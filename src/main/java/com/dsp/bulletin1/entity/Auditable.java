@@ -62,19 +62,6 @@ public abstract class Auditable {
 		this.isDeleted = Boolean.FALSE;
 		this.updatedAt = LocalDateTime.now();
 	}
-
-    // @Autowired
-    // private RestTemplate restTemplate;
-    // private static final String SET_API_URL = "https://localhost:8887/setSession/1";
-	// public void setData() {
-    //      restTemplate.getForObject(SET_API_URL, none);
-    // }
-    // private static final String API_URL = "https://localhost:8887/getSessionId";
-
-    // public Long getData() {
-    //     Long response = restTemplate.getForObject(API_URL, Long.class);
-    //     return response;
-    // }
 	
 }
 

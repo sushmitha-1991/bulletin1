@@ -15,6 +15,5 @@ import com.dsp.bulletin1.entity.Bulletin1Details;
 
 public interface Bulletin1DetailsRepository extends JpaRepository<Bulletin1Details, Long> ,  JpaSpecificationExecutor<Bulletin1Details> {
 
-			List<Bulletin1Details> findByLokSabhaSessionNo(Long lokSabhaSessionNo);
-
+			
 }
