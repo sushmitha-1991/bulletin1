@@ -17,11 +17,13 @@ import jakarta.persistence.PreUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable {
 

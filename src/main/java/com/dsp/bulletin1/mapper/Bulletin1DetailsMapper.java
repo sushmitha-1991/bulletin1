@@ -1,39 +1,64 @@
 package com.dsp.bulletin1.mapper;
+import org.mapstruct.Mapper;
+
+import com.dsp.bulletin1.dto.ApplicationInstanceDTO;
 import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
-public  class Bulletin1DetailsMapper {
+@Mapper(componentModel = "string")
+public  interface Bulletin1DetailsMapper {
     // Convert Entity to DTO
-    public static Bulletin1DetailsDTO toDTO(Bulletin1Details entity) {
-    	Bulletin1DetailsDTO dto = new Bulletin1DetailsDTO();
-            dto.setId(entity.getId());
-            dto.setBulletinNo(entity.getBulletinNo());
-            dto.setBulletinDate(entity.getBulletinDate());
-            dto.setBulletinDateHindi(entity.getBulletinDateHindi());
-            dto.setDraftStatus(entity.getDraftStatus());
-            dto.setApproverId(entity.getApproverId());   
-            dto.setLokSabhaNo(entity.getLokSabhaNo());
-            dto.setLokSabhaSessionNo(entity.getLokSabhaSessionNo());
-            dto.setRajyaSabhaSessionNo(entity.getRajyaSabhaSessionNo());  
-            dto.setBulletin1Content(entity.getBulletin1Content());
-            dto.setFootNotes(entity.getFootNotes());
-            dto.setRefNo(entity.getRefNo());
-            return dto;
-        }
-    
-        public static Bulletin1Details toEntity(Bulletin1DetailsDTO dto) {
-            Bulletin1Details entity = new Bulletin1Details();
-            entity.setId(dto.getId());
-            entity.setBulletinNo(dto.getBulletinNo());
-            entity.setBulletinDate(dto.getBulletinDate());
-            entity.setBulletinDateHindi(dto.getBulletinDateHindi());
-            entity.setDraftStatus(dto.getDraftStatus());
-            entity.setApproverId(dto.getApproverId());   
-            entity.setLokSabhaNo(dto.getLokSabhaNo());
-            entity.setLokSabhaSessionNo(dto.getLokSabhaSessionNo());
-            entity.setRajyaSabhaSessionNo(dto.getRajyaSabhaSessionNo()); 
-            entity.setBulletin1Content(dto.getBulletin1Content()); 
-            entity.setFootNotes(dto.getFootNotes());
-            entity.setRefNo(dto.getRefNo());
-            return entity;
+    public static Bulletin1DetailsDTO toDTO(Bulletin1Details entity) 
+    {
+        return Bulletin1DetailsDTO.builder()
+        .id(entity.getId())
+        .bulletinNo(entity.getBulletinNo())
+        .bulletinDate(entity.getBulletinDate())
+        .bulletinDateHindi(entity.getBulletinDateHindi())
+        .approverId(entity.getApproverId())
+        .refNo(entity.getRefNo())
+        .startingPageNo(entity.getStartingPageNo())
+        .bulletin1Content(entity.getBulletin1Content())
+        .draftStatus(entity.getDraftStatus())
+        .status(entity.getStatus())
+        .codeId(entity.getCodeId())
+        .footNotes(entity.getFootNotes())
+        .documents(entity.getDocuments())
+        .lokSabhaNo(entity.getLokSabhaNo())
+        .lokSabhaSessionNo(entity.getLokSabhaSessionNo())
+        .rajyaSabhaSessionNo(entity.getRajyaSabhaSessionNo())
+        .applicationId(entity.getApplicationId())
+        .applicationNo(entity.getApplicationNo())
+        .currentStatus(entity.getCurrentStatus())
+        .applicationInstanceDTO(ApplicationInstanceDTO.builder()
+        .id(entity.getId())
+        .applicationId(entity.getApplicationId())
+        .applicationNo(entity.getApplicationNo())
+        .currentStatus(entity.getCurrentStatus())
+        .build())
+        .build(); 
+    }
+    // Convert DTO to Entity
+    public static Bulletin1Details toEntity(Bulletin1DetailsDTO dto) {
+        return Bulletin1Details.builder()
+        .id(dto.getId())
+        .bulletinNo(dto.getBulletinNo())
+        .bulletinDate(dto.getBulletinDate())
+        .bulletinDateHindi(dto.getBulletinDateHindi())
+        .approverId(dto.getApproverId())
+        .bulletin1Content(dto.getBulletin1Content())
+        .codeId(dto.getCodeId())
+        .refNo(dto.getRefNo())
+        .startingPageNo(dto.getStartingPageNo())
+        .draftStatus(dto.getDraftStatus())
+        .status(dto.getStatus())
+        .footNotes(dto.getFootNotes())
+        .documents(dto.getDocuments())
+        .lokSabhaNo(dto.getLokSabhaNo())
+        .lokSabhaSessionNo(dto.getLokSabhaSessionNo())
+        .rajyaSabhaSessionNo(dto.getRajyaSabhaSessionNo())
+        .applicationId(dto.getApplicationId())
+        .applicationNo(dto.getApplicationNo())
+        .currentStatus(dto.getCurrentStatus())
+        .build(); 
     }
 }

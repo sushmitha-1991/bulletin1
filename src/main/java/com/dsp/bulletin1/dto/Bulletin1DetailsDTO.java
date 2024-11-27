@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import com.dsp.bulletin1.entity.Bulletin1Docs;
+import com.dsp.bulletin1.entity.enums.Status;
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +25,6 @@ import lombok.Setter;
 @Setter
 public class Bulletin1DetailsDTO {
     @NotEmpty
-    private Long id;
-    @NotEmpty
     private Long bulletinNo;
 	@NotEmpty
     private LocalDate bulletinDate;
@@ -37,14 +38,27 @@ public class Bulletin1DetailsDTO {
     @NotEmpty
     private String refNo;
     private Long approverId;
+    private  Long startingPageNo;
+    private Long codeId;  
 	@NotEmpty
     private Boolean draftStatus;
+    private Status status;
+    private Bulletin1DocsDTO docDetails;
+
     private List<Map<String, Object>> footNotes;
+    private List<Map<String, Object>> documents;
+
     private MastersLokSabhaDTO lokSabhaDetails;
     private MastersRajyaSabhaSessionDTO rajyaSabhaSessionDetails;
     private MastersLokSabhaSessionDTO lokSabhaSessionDetails;
     private ApproverDTO approverDetails;
-	
+
+	//Application Instances
+    private Long id;
+ private Long applicationId; // Reference to Application ID
+ private String applicationNo;
+ private String currentStatus;
+ private ApplicationInstanceDTO applicationInstanceDTO;
 	}
 
     

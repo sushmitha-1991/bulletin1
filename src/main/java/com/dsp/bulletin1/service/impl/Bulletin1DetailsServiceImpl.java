@@ -11,12 +11,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.dsp.bulletin1.dto.ApplicationDTO;
+import com.dsp.bulletin1.dto.ApplicationInstanceDTO;
 import com.dsp.bulletin1.dto.ApproverDTO;
 import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
+import com.dsp.bulletin1.dto.Bulletin1DocsDTO;
 import com.dsp.bulletin1.dto.MastersLokSabhaDTO;
 import com.dsp.bulletin1.dto.MastersLokSabhaSessionDTO;
 import com.dsp.bulletin1.dto.MastersRajyaSabhaSessionDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
+import com.dsp.bulletin1.entity.enums.Status;
 import com.dsp.bulletin1.entity.specification.Bulletin1Spec;
 import com.dsp.bulletin1.exception.UserNotFoundException;
 import com.dsp.bulletin1.mapper.ApproverMapper;
@@ -57,19 +60,99 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 
 	@Override
 	public Bulletin1DetailsDTO createBulletin1(Bulletin1DetailsDTO bulletin1DTO) {
-		if(bulletin1DTO.getRefNo()==null)
-		{
-			String refNo="BTN"+bulletin1DTO.getLokSabhaNo()+bulletin1DTO.getLokSabhaSessionNo()+bulletin1DTO.getId();
-			bulletin1DTO.setRefNo(refNo);
-		}
-        if(bulletin1DTO.getDraftStatus()==null)
-		{
-			bulletin1DTO.setDraftStatus(false);
-		}
-		Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
-		bulletin1Details = bulletin1Repository.save(bulletin1Details);
-		return Bulletin1DetailsMapper.toDTO(bulletin1Details);
+		
+if(bulletin1DTO.getDraftStatus())
+            { 
+            String refNo="DBTN"+bulletin1DTO.getLokSabhaNo()+bulletin1DTO.getLokSabhaSessionNo()+bulletin1DTO.getId();
+            bulletin1DTO.setRefNo(refNo);
+            bulletin1DTO.setApplicationNo(refNo);
+            bulletin1DTO.setStatus(Status.DRAFTED);
+            }
+            else{
+            String refNo="BTN"+bulletin1DTO.getLokSabhaNo()+bulletin1DTO.getLokSabhaSessionNo()+bulletin1DTO.getId();
+            bulletin1DTO.setRefNo(refNo);
+            bulletin1DTO.setApplicationNo(refNo);
+            bulletin1DTO.setDraftStatus(false);;
+            }
+            if(bulletin1DTO.getStatus()==null)
+            {
+                bulletin1DTO.setStatus(Status.SUBMITTED);
+            }
+        Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
+        LOGGER.debug("Entering save Bulletin1  with Bulletin1 DTO: {}", bulletin1Details);
+        try { 
+            LOGGER.debug("Converted Bulletin1 DTO to entity: {}", bulletin1Details);
+            Bulletin1Details savedBulletin = bulletin1Repository.save(bulletin1Details);
+            LOGGER.debug("Saved Bulletin1 entity: {}", savedBulletin);
+
+            if(savedBulletin.getLokSabhaSessionNo()==null && savedBulletin.getLokSabhaNo()==null)
+            {
+                String refNo=generateApplicationNo(savedBulletin.getRajyaSabhaSessionNo(),savedBulletin.getId(),
+                savedBulletin.getDraftStatus());
+                savedBulletin.setApplicationNo(refNo);
+                LOGGER.info(
+            "Saved Bulletin1 attributes: ID={}, RajyaSabhaSessionNo={},  Status={}",
+            savedBulletin.getId(),  savedBulletin.getRajyaSabhaSessionNo(), savedBulletin.getStatus());
+            }
+            else{
+                String refNo=generateApplicationNo(savedBulletin.getLokSabhaNo(),
+                savedBulletin.getLokSabhaSessionNo(),savedBulletin.getId(),savedBulletin.getDraftStatus());
+                savedBulletin.setApplicationNo(refNo);
+
+            LOGGER.info(
+                "Saved Bulletin1 attributes: ID={}, LokSabhaNo={}, SessionNo={},  Status={}",
+                savedBulletin.getId(), savedBulletin.getLokSabhaNo(), 
+                savedBulletin.getLokSabhaSessionNo(), savedBulletin.getStatus());
+            }
+
+            savedBulletin.setCurrentStatus(""+savedBulletin.getStatus());
+
+            Bulletin1DocsDTO docsDTO= Bulletin1DocsDTO.builder()
+            .id(savedBulletin.getId())
+            .refDocDate(savedBulletin.getBulletinDate())
+            .refDocId(savedBulletin.getCodeId())
+            .bulletin1Id(savedBulletin.getId())
+            .build();
+            LOGGER.debug("Created docsDTO for microservice call: {}", docsDTO);
+            // Bulletin1DocsDTO savedDocsDTO = createBulletinDocs(docsDTO);
+            // LOGGER.debug("Saved BulletinDocs returned from microservice: {}", savedDocsDTO);
+            Bulletin1DetailsDTO responseDTO = Bulletin1DetailsMapper.toDTO(savedBulletin);
+            // responseDTO.setDocDetails(savedDocsDTO);
+            LOGGER.debug("Returning Bulletin DTO with ApplicationInstanceDTO: {}", responseDTO);
+            responseDTO.setApplicationInstanceDTO(ApplicationInstanceDTO.builder()
+            .id(responseDTO.getId())
+            .applicationId(responseDTO.getApplicationId())
+            .applicationNo(responseDTO.getApplicationNo())
+            .currentStatus(responseDTO.getCurrentStatus())
+            .build());
+            return responseDTO;
+        } catch (Exception e) {
+            LOGGER.error("Error in saveListOfBusinessCreate: ", e);
+            throw e;
+        }
+		// Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
+		// bulletin1Details = bulletin1Repository.save(bulletin1Details);
+		// return Bulletin1DetailsMapper.toDTO(bulletin1Details);
 	}
+    private String generateApplicationNo(Long rajyaSabhaSessionNo, Long id,Boolean saveAsDraft) {
+        if(saveAsDraft)
+        {
+        return "DB1LS" + rajyaSabhaSessionNo + id;
+        }
+        else{
+            return "B1RS"+rajyaSabhaSessionNo+ id;
+        }
+    }
+    private String generateApplicationNo(Long lokSabhaNo, Long sessionNo, Long id,Boolean saveAsDraft) {
+		if(saveAsDraft)
+        {
+        return "DB1LS" + lokSabhaNo + sessionNo + id;
+        }
+        else{
+            return "B1LS"+lokSabhaNo + sessionNo + id;
+        }
+	}
+
 	@Override
 	public Bulletin1DetailsDTO updateBulletin1(Long id, Bulletin1DetailsDTO bulletin1DTO) {
         if(bulletin1DTO.getRefNo()==null)
