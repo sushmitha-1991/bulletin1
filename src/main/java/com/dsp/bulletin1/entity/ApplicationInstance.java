@@ -2,6 +2,7 @@ package com.dsp.bulletin1.entity;
 
 import java.util.Map;
 
+import com.dsp.bulletin1.util.MapJsonConverter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -24,6 +25,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+// @Table(name = "application_instance", schema = "master")
 @Table(name = "application_instance", schema = "master")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class ApplicationInstance extends Auditable{
@@ -63,7 +65,7 @@ public class ApplicationInstance extends Auditable{
 	@Column(name = "rajya_sabha_session", length = 30)
 	private String rajyaSabhaSession;
 
-	@Convert(converter = JsonConverter.class)
+	@Convert(converter = MapJsonConverter.class)
 	@Column(name = "other_info", columnDefinition = "jsonb")
 	private Map<String, Object> otherInfo;
 
