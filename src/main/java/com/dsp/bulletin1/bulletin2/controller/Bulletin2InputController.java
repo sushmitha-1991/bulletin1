@@ -42,27 +42,28 @@ public class Bulletin2InputController
 	public Bulletin2InputController(Bulletin2InputService service) {
 		this.service = service;
 	}
-	@Operation(summary = "Create a new Bulletin2", description = "Creates a new Bulletin2 and returns the created Lob details.")
+	@Operation(summary = "Create a new Bulletin2", description = "Creates a new Bulletin2 and returns the created Bulletin2 details.")
 	@ApiResponses(value = { 
-			@ApiResponse(responseCode = "201", description = "Lob created successfully"),
+			@ApiResponse(responseCode = "201", description = "Bulletin2 created successfully"),
 			@ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@PostMapping("/save")
-	public ResponseEntity<GenericResponse<Bulletin2InputDTO>> createLobInput(@RequestBody Bulletin2InputDTO lobCreateDTO) 
+	public ResponseEntity<GenericResponse<Bulletin2InputDTO>> createBulletin2(@RequestBody 
+	Bulletin2InputDTO bulletin2DTO) 
 	{
-		Bulletin2InputDTO lobCreateDTODetails = service.createBulletin2(lobCreateDTO);
+		Bulletin2InputDTO bulletinDTO = service.createBulletin2(bulletin2DTO);
 		GenericResponse<Bulletin2InputDTO> response = 
 		new GenericResponse<>(HttpStatus.CREATED.value(), true,
-				"List Of Business created successfully.",lobCreateDTODetails );
+				"Bulletin2 Input created successfully.",bulletinDTO );
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
-	@Operation(summary = "Update Lob By Id", description = "Get Lob By Id and Update Lob Details by Id.")
+	@Operation(summary = "Update Bulletin2 By Id", description = "Get Bulletin2 By Id and Update Bulletin2 Details by Id.")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Lob Details Updated successfully"),
+			@ApiResponse(responseCode = "200", description = "Bulletin2 Details Updated successfully"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@PutMapping("update/{id}")
-	public ResponseEntity<GenericResponse<Bulletin2InputDTO>> updateLobCreate(@PathVariable Long id,
+	public ResponseEntity<GenericResponse<Bulletin2InputDTO>> updateById(@PathVariable Long id,
 			@RequestBody Bulletin2InputDTO bulletin2InputDTO) {
 		Bulletin2InputDTO updatedBulletin2DTO = service.updateById(id, bulletin2InputDTO );
 		GenericResponse<Bulletin2InputDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
@@ -87,10 +88,10 @@ public class Bulletin2InputController
 			@ApiResponse(responseCode = "200", description = "Delete retrieved successfully"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@DeleteMapping("delete/{id}")
-	public ResponseEntity<GenericResponse<Void>> deleteLobById(@PathVariable Long id) {
+	public ResponseEntity<GenericResponse<Void>> deleteById(@PathVariable Long id) {
 		service.deleteById(id);
 GenericResponse<Void> response = new GenericResponse<>(HttpStatus.OK.value(), true,
-				"List Of Business deleted successfully.", null);
+				"Bulletin2 input deleted successfully.", null);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 @Operation(summary = "Get all Bulletin2s", description = "Retrieves a list of all Bulletin2s.")
