@@ -92,6 +92,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         {
             bulletin1DTO.setStatus(Status.SUBMITTED);
         }
+            bulletin1DTO.setCurrentStatus(""+bulletin1DTO.getStatus());
         Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
         LOGGER.debug("Entering save Bulletin1  with Bulletin1 DTO: {}", bulletin1Details);
         try { 
@@ -172,13 +173,12 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             return "B1LS"+lokSabhaNo + sessionNo + id;
         }
 	}
-
 	@Override
 	public Bulletin1DetailsDTO updateBulletin1(Long id, Bulletin1DetailsDTO bulletin1DTO) {
-        
+    try
+    {
 		Bulletin1Details existingBulletin1 = bulletin1Repository.findById(id)
         .orElseThrow(() -> new UserNotFoundException("Bulletin1 Details not found with ID: " + id));
-    
         if(existingBulletin1.getDraftStatus())
         {
             bulletin1DTO.setStatus(Status.DRAFTED);
@@ -199,9 +199,54 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             bulletin1DTO.setStatus(Status.SUBMITTED);
         }
 		Bulletin1Details updatedBulletin1= Bulletin1DetailsMapper.toEntity(bulletin1DTO);
+        if(updatedBulletin1.getApplicationNo()!=null || updatedBulletin1.getApplicationNo().startsWith("D"))
+        {
+            if(updatedBulletin1.getLokSabhaSessionNo()==null)
+            {
+                String applicationNo = generateApplicationNo(updatedBulletin1.getRajyaSabhaSessionNo(), 
+                updatedBulletin1.getId(),updatedBulletin1.getDraftStatus());
+                updatedBulletin1.setApplicationNo(applicationNo);
+                LOGGER.debug("Generated Application No for Bulletin1 RS: {}", applicationNo);
+            }
+            else{
+                String applicationNo = generateApplicationNo(updatedBulletin1.getLokSabhaNo(),
+                updatedBulletin1.getLokSabhaSessionNo(), updatedBulletin1.getId(),updatedBulletin1.getDraftStatus());
+                updatedBulletin1.setApplicationNo(applicationNo);
+                LOGGER.debug("Generated Application No for Bulletin1 LS: {}", applicationNo);
+            }
+        }
 		updatedBulletin1.setId(existingBulletin1.getId());
-		bulletin1Repository.save(updatedBulletin1);
+		try
+        {
+            bulletin1Repository.save(updatedBulletin1);
+
+        }
+        catch(Exception e)
+        {
+            LOGGER.error("Error in save Bulletin1 : ", e);
+            throw e;
+        }
+        LOGGER.debug("Updated bulletin1 entity with Application No: {}", updatedBulletin1);
+        if(updatedBulletin1.getLokSabhaSessionNo()==null && updatedBulletin1.getLokSabhaNo()==null)
+        {
+        LOGGER.info(
+        "Saved Bulletin1 generate attributes: ID={}, RajyaSabhaSessionNo={},  Status={}",
+        updatedBulletin1.getId(),  updatedBulletin1.getRajyaSabhaSessionNo(), 
+        updatedBulletin1.getStatus());
+        }
+        else{
+        LOGGER.info(
+            "Saved Bulletin1 generate attributes: ID={}, LokSabhaNo={}, SessionNo={},  Status={}",
+            updatedBulletin1.getId(), updatedBulletin1.getLokSabhaNo(), 
+            updatedBulletin1.getLokSabhaSessionNo(), updatedBulletin1.getStatus());
+        }
 		return Bulletin1DetailsMapper.toDTO(updatedBulletin1);
+    }
+    catch (Exception e) 
+    {
+        LOGGER.error("Error in save Bulletin1 : ", e);
+        throw e;
+    }
 	}
 	@Override
 	public Bulletin1DetailsDTO getBulletin1ById(Long id) {

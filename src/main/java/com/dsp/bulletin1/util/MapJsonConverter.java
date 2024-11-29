@@ -1,33 +1,30 @@
 package com.dsp.bulletin1.util;
+
 import java.io.IOException;
 import java.util.Map;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
 @Converter
-public class MapJsonConverter implements AttributeConverter<Map<String, Object>, String> 
-{
+public class MapJsonConverter implements AttributeConverter<Map<String, Object>, String> {
+
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	private static final Logger logger = LoggerFactory.getLogger(MapJsonConverter.class);
+
 	static {
 		// Register the JavaTimeModule to handle Java 8 time types
 		objectMapper.registerModule(new JavaTimeModule());
 	}
+
 	@Override
 	public String convertToDatabaseColumn(Map<String, Object> attribute) {
-		System.out.println("sssssssssssssssMMMMMMMMMMMmmm");
-		System.out.println(attribute);
 		if (attribute == null) {
 			return null;
 		}
@@ -38,10 +35,9 @@ public class MapJsonConverter implements AttributeConverter<Map<String, Object>,
 			throw new IllegalArgumentException("Error converting map to JSON", e);
 		}
 	}
+
 	@Override
 	public Map<String, Object> convertToEntityAttribute(String dbData) {
-		System.out.println("jjjjjjjjjjjjjjjjjjjjMMMMMMMMMMm");
-		System.out.println(dbData);
 		if (dbData == null) {
 			return null;
 		}
