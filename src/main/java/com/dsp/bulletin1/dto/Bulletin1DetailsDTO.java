@@ -55,13 +55,9 @@ public class Bulletin1DetailsDTO {
 
 	//Application Instances
     private Long id;
- private Long applicationId; // Reference to Application ID
- private String applicationNo;
- private String currentStatus;
- private ApplicationInstanceDTO applicationInstanceDTO;
+    private Long applicationId; // Reference to Application ID
+    private String applicationNo;
+    private String currentStatus;
+    private Map<String, Object> otherInfo;
+    private ApplicationInstanceDTO applicationInstanceDTO;
 	}
-
-    
-    
-
-

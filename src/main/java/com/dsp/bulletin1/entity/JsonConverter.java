@@ -14,14 +14,18 @@ import java.io.IOException;
     @Converter
     public class JsonConverter implements AttributeConverter<List<Map<String, Object>>, String> {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    // private final ObjectMapper objectMapper = new ObjectMapper();
 
+    ObjectMapper objectMapper = new ObjectMapper();
+ 
     @Override
     public String convertToDatabaseColumn(List<Map<String, Object>> attribute) {
         if (attribute == null) {
             return null;
         }
         try {
+            System.out.println("sssssssssssssss");
+            System.out.println(attribute);
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Failed to convert list of maps to JSON string: " + attribute, e);
@@ -30,6 +34,8 @@ import java.io.IOException;
 
     @Override
     public List<Map<String, Object>> convertToEntityAttribute(String dbData) {
+        System.out.println("jjjjjjjjjjjjj");
+        System.out.println(dbData);
         if (dbData == null || dbData.isEmpty()) {
             return null;
         }
