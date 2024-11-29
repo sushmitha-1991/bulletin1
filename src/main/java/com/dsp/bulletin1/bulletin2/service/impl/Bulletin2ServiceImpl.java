@@ -62,12 +62,6 @@ public class Bulletin2ServiceImpl implements Bulletin2Service {
         this.restTemplate=restTemplate;
 	}
 
-	@Value("${application.instance.service.url}")
-	private String applicationInstanceServiceUrl;
-    
-	@Value("${loksabha.session.service.url}")
-	private String lokSabhaSessionServiceUrl;
-    
 	@Override
 	public Bulletin2DTO createBulletin2(Bulletin2DTO bulletin2DTO) 
     {
@@ -122,13 +116,13 @@ public class Bulletin2ServiceImpl implements Bulletin2Service {
 			LOGGER.debug("Created ApplicationInstanceDTO for microservice call: {}", applicationInstanceDTO);
 
 			// Call ApplicationInstance microservice to save the application instance data
-			ApplicationInstanceDTO savedInstanceDTO = createApplicationInstance(applicationInstanceDTO);
-			LOGGER.debug("Saved ApplicationInstanceDTO returned from microservice: {}", savedInstanceDTO);
+			// ApplicationInstanceDTO savedInstanceDTO = createApplicationInstance(applicationInstanceDTO);
+			// LOGGER.debug("Saved ApplicationInstanceDTO returned from microservice: {}", savedInstanceDTO);
 
 			// Validate template ID
 			// Convert saved entity back to DTO
 			Bulletin2DTO responseDTO = Bulletin2Mapper.toDTO(savedBulletin2);
-			responseDTO.setApplicationInstanceDTO(savedInstanceDTO); // Set the ApplicationInstanceDTO
+			// responseDTO.setApplicationInstanceDTO(savedInstanceDTO); // Set the ApplicationInstanceDTO
 			LOGGER.debug("Returning Lob DTO with ApplicationInstanceDTO: {}", responseDTO);
 
 			//  responseDTO.setTemplateId(ListOfBusinessCreateDTO.getTemplateId()); 
@@ -160,85 +154,85 @@ public class Bulletin2ServiceImpl implements Bulletin2Service {
             return "LOBLS"+lokSabhaNo + sessionNo + id;
         }
 	}
-//updateByRefId
-    private ApplicationInstanceDTO createApplicationInstance(ApplicationInstanceDTO applicationInstanceDTO) {
-		// String url = applicationInstanceServiceUrl + "/create";
-        String url = UriComponentsBuilder.fromHttpUrl(applicationInstanceServiceUrl)
-                                 .path("/create")
-                                 .toUriString();
-		LOGGER.debug("Calling ApplicationInstance service at URL: {} with ApplicationInstanceDTO: {}", url,
-				applicationInstanceDTO);
-		try {
-			ResponseEntity<GenericResponse<ApplicationInstanceDTO>> response = restTemplate.exchange(url,
-					HttpMethod.POST, new HttpEntity<>(applicationInstanceDTO),
-					new ParameterizedTypeReference<GenericResponse<ApplicationInstanceDTO>>() {
-					});
-			if (response == null || response.getBody() == null || response.getBody().getData() == null) {
-				LOGGER.error("Response or body is null from ApplicationInstance service");
-				throw new RuntimeException("Failed to create ApplicationInstance, response is null");
-			}
+// //updateByRefId
+//     private ApplicationInstanceDTO createApplicationInstance(ApplicationInstanceDTO applicationInstanceDTO) {
+// 		// String url = applicationInstanceServiceUrl + "/create";
+//         String url = UriComponentsBuilder.fromHttpUrl(applicationInstanceServiceUrl)
+//                                  .path("/create")
+//                                  .toUriString();
+// 		LOGGER.debug("Calling ApplicationInstance service at URL: {} with ApplicationInstanceDTO: {}", url,
+// 				applicationInstanceDTO);
+// 		try {
+// 			ResponseEntity<GenericResponse<ApplicationInstanceDTO>> response = restTemplate.exchange(url,
+// 					HttpMethod.POST, new HttpEntity<>(applicationInstanceDTO),
+// 					new ParameterizedTypeReference<GenericResponse<ApplicationInstanceDTO>>() {
+// 					});
+// 			if (response == null || response.getBody() == null || response.getBody().getData() == null) {
+// 				LOGGER.error("Response or body is null from ApplicationInstance service");
+// 				throw new RuntimeException("Failed to create ApplicationInstance, response is null");
+// 			}
 
-			ApplicationInstanceDTO savedInstance = response.getBody().getData();
-			LOGGER.debug("Received ApplicationInstanceDTO from ApplicationInstance service: {}", savedInstance);
-			return savedInstance;
+// 			ApplicationInstanceDTO savedInstance = response.getBody().getData();
+// 			LOGGER.debug("Received ApplicationInstanceDTO from ApplicationInstance service: {}", savedInstance);
+// 			return savedInstance;
 
-		} catch (ResourceNotFoundException e) {
-			LOGGER.error("Resource not found when calling ApplicationInstance service: {}", e.getMessage());
-			throw e; // Re-throw the exception for further handling
-		}  catch (HttpStatusCodeException e) {
-            // Log the status code and response body for debugging
-            LOGGER.error("Error response from ApplicationInstance service: Status={}, Body={}",
-                e.getStatusCode(), e.getResponseBodyAsString());
-            throw new RuntimeException("Failed to create ApplicationInstance", e);
-        }
-        catch (Exception e) {
-			LOGGER.error("Error calling ApplicationInstance service: ", e);
-			throw new RuntimeException("Failed to create ApplicationInstance", e);
-		}
+// 		} catch (ResourceNotFoundException e) {
+// 			LOGGER.error("Resource not found when calling ApplicationInstance service: {}", e.getMessage());
+// 			throw e; // Re-throw the exception for further handling
+// 		}  catch (HttpStatusCodeException e) {
+//             // Log the status code and response body for debugging
+//             LOGGER.error("Error response from ApplicationInstance service: Status={}, Body={}",
+//                 e.getStatusCode(), e.getResponseBodyAsString());
+//             throw new RuntimeException("Failed to create ApplicationInstance", e);
+//         }
+//         catch (Exception e) {
+// 			LOGGER.error("Error calling ApplicationInstance service: ", e);
+// 			throw new RuntimeException("Failed to create ApplicationInstance", e);
+// 		}
 
-	}
-    private ApplicationInstanceDTO updateApplicationInstance(ApplicationInstanceDTO applicationInstanceDTO) {
-		// String url = applicationInstanceServiceUrl + "/create";
-        // String url = UriComponentsBuilder.fromHttpUrl(applicationInstanceServiceUrl)
-        //                          .path("/updateByRefId/{}",applicationInstanceDTO.getRefId())
-        //                          .toUriString();
-        String url = UriComponentsBuilder.fromHttpUrl(applicationInstanceServiceUrl)
-        .path("/getBy/{id}")
-        .buildAndExpand(applicationInstanceDTO.getId())
-        .toUriString();
+// 	}
+//     private ApplicationInstanceDTO updateApplicationInstance(ApplicationInstanceDTO applicationInstanceDTO) {
+// 		// String url = applicationInstanceServiceUrl + "/create";
+//         // String url = UriComponentsBuilder.fromHttpUrl(applicationInstanceServiceUrl)
+//         //                          .path("/updateByRefId/{}",applicationInstanceDTO.getRefId())
+//         //                          .toUriString();
+//         String url = UriComponentsBuilder.fromHttpUrl(applicationInstanceServiceUrl)
+//         .path("/getBy/{id}")
+//         .buildAndExpand(applicationInstanceDTO.getId())
+//         .toUriString();
 
-		LOGGER.debug("Calling ApplicationInstance service at URL: {} with ApplicationInstanceDTO: {}", url,
-				applicationInstanceDTO);
+// 		LOGGER.debug("Calling ApplicationInstance service at URL: {} with ApplicationInstanceDTO: {}", url,
+// 				applicationInstanceDTO);
 
-		try {
-			ResponseEntity<GenericResponse<ApplicationInstanceDTO>> response = restTemplate.exchange(url,
-					HttpMethod.POST, new HttpEntity<>(applicationInstanceDTO),
-					new ParameterizedTypeReference<GenericResponse<ApplicationInstanceDTO>>() {
-					});
-			if (response == null || response.getBody() == null || response.getBody().getData() == null) {
-				LOGGER.error("Response or body is null from ApplicationInstance service");
-				throw new RuntimeException("Failed to Update ApplicationInstance, response is null");
-			}
+// 		try {
+// 			ResponseEntity<GenericResponse<ApplicationInstanceDTO>> response = restTemplate.exchange(url,
+// 					HttpMethod.POST, new HttpEntity<>(applicationInstanceDTO),
+// 					new ParameterizedTypeReference<GenericResponse<ApplicationInstanceDTO>>() {
+// 					});
+// 			if (response == null || response.getBody() == null || response.getBody().getData() == null) {
+// 				LOGGER.error("Response or body is null from ApplicationInstance service");
+// 				throw new RuntimeException("Failed to Update ApplicationInstance, response is null");
+// 			}
 
-			ApplicationInstanceDTO savedInstance = response.getBody().getData();
-			LOGGER.debug("Received ApplicationInstanceDTO from ApplicationInstance service: {}", savedInstance);
-			return savedInstance;
+// 			ApplicationInstanceDTO savedInstance = response.getBody().getData();
+// 			LOGGER.debug("Received ApplicationInstanceDTO from ApplicationInstance service: {}", savedInstance);
+// 			return savedInstance;
 
-		} catch (ResourceNotFoundException e) {
-			LOGGER.error("Resource not found when calling ApplicationInstance service: {}", e.getMessage());
-			throw e; // Re-throw the exception for further handling
-		}  catch (HttpStatusCodeException e) {
-            // Log the status code and response body for debugging
-            LOGGER.error("Error response from ApplicationInstance service: Status={}, Body={}",
-                e.getStatusCode(), e.getResponseBodyAsString());
-            throw new RuntimeException("Failed to Update ApplicationInstance", e);
-        }
-        catch (Exception e) {
-			LOGGER.error("Error calling ApplicationInstance service: ", e);
-			throw new RuntimeException("Failed to update ApplicationInstance", e);
-		}
+// 		} catch (ResourceNotFoundException e) {
+// 			LOGGER.error("Resource not found when calling ApplicationInstance service: {}", e.getMessage());
+// 			throw e; // Re-throw the exception for further handling
+// 		}  catch (HttpStatusCodeException e) {
+//             // Log the status code and response body for debugging
+//             LOGGER.error("Error response from ApplicationInstance service: Status={}, Body={}",
+//                 e.getStatusCode(), e.getResponseBodyAsString());
+//             throw new RuntimeException("Failed to Update ApplicationInstance", e);
+//         }
+//         catch (Exception e) {
+// 			LOGGER.error("Error calling ApplicationInstance service: ", e);
+// 			throw new RuntimeException("Failed to update ApplicationInstance", e);
+// 		}
 
-	}
+// 	}
 	@Override
 	public Bulletin2DTO updateById(Long id, Bulletin2DTO lobDTO) 
     {
@@ -300,13 +294,13 @@ public class Bulletin2ServiceImpl implements Bulletin2Service {
 			LOGGER.debug("Updated ApplicationInstanceDTO for microservice call: {}", applicationInstanceDTO);
 
 			// Call ApplicationInstance microservice to save the application instance data
-			ApplicationInstanceDTO savedInstanceDTO = updateApplicationInstance(applicationInstanceDTO);
-			LOGGER.debug("Updated ApplicationInstanceDTO returned from microservice: {}", savedInstanceDTO);
+			// ApplicationInstanceDTO savedInstanceDTO = updateApplicationInstance(applicationInstanceDTO);
+			// LOGGER.debug("Updated ApplicationInstanceDTO returned from microservice: {}", savedInstanceDTO);
 
 			// Validate template ID
 			// Convert saved entity back to DTO
 			Bulletin2DTO responseDTO = Bulletin2Mapper.toDTO(updatedEntityBulletin2);
-			responseDTO.setApplicationInstanceDTO(savedInstanceDTO); // Set the ApplicationInstanceDTO
+			// responseDTO.setApplicationInstanceDTO(savedInstanceDTO); // Set the ApplicationInstanceDTO
 			LOGGER.debug("Returning Bulletin2 DTO with ApplicationInstanceDTO: {}", responseDTO);
 			//  responseDTO.setTemplateId(ListOfBusinessCreateDTO.getTemplateId()); 
 			//  responseDTO.setTemplateHindiId(ListOfBusinessCreateDTO.getTemplateHindiId());
@@ -337,11 +331,11 @@ public class Bulletin2ServiceImpl implements Bulletin2Service {
 			});
 
 			Bulletin2DTO dto = Bulletin2Mapper.toDTO(entity);
-            if(entity.getApplicationNo()!=null)
-			{
-                ApplicationInstanceDTO instanceDTO = fetchApplicationInstanceData(entity.getApplicationNo());
-			    dto.setApplicationInstanceDTO(instanceDTO);
-            }
+            // if(entity.getApplicationNo()!=null)
+			// {
+            //     ApplicationInstanceDTO instanceDTO = fetchApplicationInstanceData(entity.getApplicationNo());
+			//     dto.setApplicationInstanceDTO(instanceDTO);
+            // }
 			LOGGER.debug("Returning existingLobCreateDTO: {}", dto);            
 
         if(entity.getLokSabhaSessionNo()!=null)
@@ -370,35 +364,35 @@ public class Bulletin2ServiceImpl implements Bulletin2Service {
 		}
 	}
 
-	private ApplicationInstanceDTO fetchApplicationInstanceData(String applicationNo) {
-		String url = applicationInstanceServiceUrl + "/getApplicationNo/" + applicationNo;
-		LOGGER.debug("Fetching ApplicationInstance by applicationNo from URL: {}", url);
+	// private ApplicationInstanceDTO fetchApplicationInstanceData(String applicationNo) {
+	// 	String url = applicationInstanceServiceUrl + "/getApplicationNo/" + applicationNo;
+	// 	LOGGER.debug("Fetching ApplicationInstance by applicationNo from URL: {}", url);
 
-		try {
-			ResponseEntity<GenericResponse<ApplicationInstanceDTO>> response = restTemplate.exchange(url,
-					HttpMethod.GET, null, 
-                    new ParameterizedTypeReference<GenericResponse<ApplicationInstanceDTO>>() {
-					});
+	// 	try {
+	// 		ResponseEntity<GenericResponse<ApplicationInstanceDTO>> response = restTemplate.exchange(url,
+	// 				HttpMethod.GET, null, 
+    //                 new ParameterizedTypeReference<GenericResponse<ApplicationInstanceDTO>>() {
+	// 				});
 
-			if (response == null || response.getBody() == null || response.getBody().getData() == null) {
-				LOGGER.error("Response or body is null when fetching ApplicationInstance for applicationNo: {}",
-						applicationNo);
-				throw new RuntimeException("Failed to fetch ApplicationInstance, response is null");
-			}
+	// 		if (response == null || response.getBody() == null || response.getBody().getData() == null) {
+	// 			LOGGER.error("Response or body is null when fetching ApplicationInstance for applicationNo: {}",
+	// 					applicationNo);
+	// 			throw new RuntimeException("Failed to fetch ApplicationInstance, response is null");
+	// 		}
 
-			ApplicationInstanceDTO instanceDTO = response.getBody().getData();
-			LOGGER.debug("Fetched ApplicationInstanceDTO: {}", instanceDTO);
-			return instanceDTO;
+	// 		ApplicationInstanceDTO instanceDTO = response.getBody().getData();
+	// 		LOGGER.debug("Fetched ApplicationInstanceDTO: {}", instanceDTO);
+	// 		return instanceDTO;
 
-		} catch (ResourceNotFoundException e) {
-			LOGGER.error("Resource not found for applicationNo: {}", applicationNo);
-			throw e; // Re-throw the exception for further handling
-		} catch (Exception e) {
-			LOGGER.error("Error fetching ApplicationInstance for applicationNo: {}", applicationNo, e);
-			throw new RuntimeException("Failed to fetch ApplicationInstance data", e);
-		}
-	}
-    // 	@Override
+	// 	} catch (ResourceNotFoundException e) {
+	// 		LOGGER.error("Resource not found for applicationNo: {}", applicationNo);
+	// 		throw e; // Re-throw the exception for further handling
+	// 	} catch (Exception e) {
+	// 		LOGGER.error("Error fetching ApplicationInstance for applicationNo: {}", applicationNo, e);
+	// 		throw new RuntimeException("Failed to fetch ApplicationInstance data", e);
+	// 	}
+	// }
+    // // 	@Override
 	// public List<Bulletin2DTO> getAllBulletins() 
     // {   
     //     LOGGER.debug("Entering getAllLOBs");
@@ -549,38 +543,38 @@ public class Bulletin2ServiceImpl implements Bulletin2Service {
         }
         return dtoList;
     }
-    private Long getCurrentLokSabhaSession() {
-        // /lokSabhaSessionServiceUrl
-        String url = lokSabhaSessionServiceUrl + "/latest-session";
-		LOGGER.debug("Fetching Current Session of LokSabha from URL: {}", url);
-    try {
-        //Map<String, List<?>>
-        // ResponseEntity<GenericResponse<MastersLokSabhaSessionDTO>> response =
-        ParameterizedTypeReference<Map<String, List<?>>> typeRef =
-                new ParameterizedTypeReference<Map<String, List<?>>>() {};
-        Map<String, List<?>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                typeRef
-        ).getBody(); 
-        if (response == null) {
-        LOGGER.error("Response or body is null when fetching current session :{}",response);
-            throw new RuntimeException("Failed to fetch ApplicationInstance, response is null");
-        }
-        System.out.println(response);
-         Long sessionNo = (Long) response.get("session").get(1);
-        // LOGGER.debug("Fetched ApplicationInstanceDTO: {}", instanceDTO);
-        // return instanceDTO;
-        return sessionNo;
+    // private Long getCurrentLokSabhaSession() {
+    //     // /lokSabhaSessionServiceUrl
+    //     String url = lokSabhaSessionServiceUrl + "/latest-session";
+	// 	LOGGER.debug("Fetching Current Session of LokSabha from URL: {}", url);
+    // try {
+    //     //Map<String, List<?>>
+    //     // ResponseEntity<GenericResponse<MastersLokSabhaSessionDTO>> response =
+    //     ParameterizedTypeReference<Map<String, List<?>>> typeRef =
+    //             new ParameterizedTypeReference<Map<String, List<?>>>() {};
+    //     Map<String, List<?>> response = restTemplate.exchange(
+    //             url,
+    //             HttpMethod.GET,
+    //             null,
+    //             typeRef
+    //     ).getBody(); 
+    //     if (response == null) {
+    //     LOGGER.error("Response or body is null when fetching current session :{}",response);
+    //         throw new RuntimeException("Failed to fetch ApplicationInstance, response is null");
+    //     }
+    //     System.out.println(response);
+    //      Long sessionNo = (Long) response.get("session").get(1);
+    //     // LOGGER.debug("Fetched ApplicationInstanceDTO: {}", instanceDTO);
+    //     // return instanceDTO;
+    //     return sessionNo;
 
-    } catch (ResourceNotFoundException e) {
-        LOGGER.error("Resource not found for LokSabhaSession");
-        throw e; // Re-throw the exception for further handling
-    } catch (Exception e) {
-        LOGGER.error("Error fetching ApplicationInstance for applicationNo: {}", e);
-        throw new RuntimeException("Failed to fetch ApplicationInstance data", e);
-    }
-    }
+    // } catch (ResourceNotFoundException e) {
+    //     LOGGER.error("Resource not found for LokSabhaSession");
+    //     throw e; // Re-throw the exception for further handling
+    // } catch (Exception e) {
+    //     LOGGER.error("Error fetching ApplicationInstance for applicationNo: {}", e);
+    //     throw new RuntimeException("Failed to fetch ApplicationInstance data", e);
+    // }
+    // }
    
 } 
