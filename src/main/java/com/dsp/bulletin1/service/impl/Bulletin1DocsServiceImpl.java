@@ -3,20 +3,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import com.dsp.bulletin1.dto.ApproverDTO;
-import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
 import com.dsp.bulletin1.dto.Bulletin1DocsDTO;
 import com.dsp.bulletin1.dto.BulletinDTO;
 import com.dsp.bulletin1.dto.MasterCodeDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
 import com.dsp.bulletin1.entity.Bulletin1Docs;
 import com.dsp.bulletin1.exception.UserNotFoundException;
-import com.dsp.bulletin1.mapper.ApproverMapper;
-import com.dsp.bulletin1.mapper.Bulletin1DetailsMapper;
 import com.dsp.bulletin1.mapper.Bulletin1DocsMapper;
 import com.dsp.bulletin1.mapper.CodeMapper;
 import com.dsp.bulletin1.mapper.GetBulletinMapper;
