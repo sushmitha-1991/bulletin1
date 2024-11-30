@@ -43,10 +43,10 @@ public class Bulletin1Details extends ApplicationInstance
     	@Column(name = "rajya_sabha_session_no")
     	private Long rajyaSabhaSessionNo; 		
 	
-		@Column(name = "bulletin1_content", length = 1024)
+		@Column(name = "bulletin1_content", columnDefinition = "text")
 		private String bulletin1Content;
 
-		@Column(name = "ref_no",nullable = false,length = 1024,unique = true)
+		@Column(name = "ref_no",nullable = false, unique = true)
 		private String refNo;
 
 		@Column(name = "approver_id")
@@ -56,7 +56,7 @@ public class Bulletin1Details extends ApplicationInstance
 		private Boolean draftStatus;
 		@Column(name="status")
 		private Status status;
-		@Column(name="starting_page_no", length=20)
+		@Column(name="starting_page_no")
 		private  Long startingPageNo;
 		
 		@Convert(converter = JsonConverter.class)
