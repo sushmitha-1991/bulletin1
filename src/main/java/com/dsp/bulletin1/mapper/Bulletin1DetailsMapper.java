@@ -26,14 +26,16 @@ public  interface Bulletin1DetailsMapper {
         .lokSabhaNo(entity.getLokSabhaNo())
         .lokSabhaSessionNo(entity.getLokSabhaSessionNo())
         .rajyaSabhaSessionNo(entity.getRajyaSabhaSessionNo())
-        // .applicationId(entity.getApplicationId())
-        // .applicationNo(entity.getApplicationNo())
-        // .currentStatus(entity.getCurrentStatus())
+        .applicationId(entity.getApplicationId())
+        .applicationNo(entity.getApplicationNo())
+        .currentStatus(entity.getCurrentStatus())
+        .refId(entity.getRefId())
         .applicationInstanceDTO(ApplicationInstanceDTO.builder()
         .id(entity.getId())
         .applicationId(entity.getApplicationId())
         .applicationNo(entity.getApplicationNo())
         .currentStatus(entity.getCurrentStatus())
+        .refId(entity.getRefId())
         .build())
         .build(); 
     }
@@ -59,6 +61,7 @@ public  interface Bulletin1DetailsMapper {
         .applicationId(dto.getApplicationId())
         .applicationNo(dto.getApplicationNo())
         .currentStatus(dto.getCurrentStatus())
+        .refId(dto.getRefId())
         .build(); 
     }
 }

@@ -58,6 +58,6 @@ public class Bulletin1DetailsDTO {
     private Long applicationId; // Reference to Application ID
     private String applicationNo;
     private String currentStatus;
-    private Map<String, Object> otherInfo;
+    private Long refId;
     private ApplicationInstanceDTO applicationInstanceDTO;
 	}

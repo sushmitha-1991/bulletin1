@@ -14,6 +14,6 @@ public class ApplicationInstanceDTO {
  private String applicationNo;
  private String currentStatus;
 //  private String publishedDocumentUrl;
-//  private Long refId;
+ private Long refId;
 //  private String processInstanceId;
 }
