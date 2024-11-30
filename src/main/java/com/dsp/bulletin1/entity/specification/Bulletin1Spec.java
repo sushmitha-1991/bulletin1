@@ -1,16 +1,8 @@
 package com.dsp.bulletin1.entity.specification;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.dsp.bulletin1.dto.ApplicationDTO;
-import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
-import com.dsp.bulletin1.dto.MastersLokSabhaDTO;
-import com.dsp.bulletin1.dto.MastersLokSabhaSessionDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
 public class Bulletin1Spec 
 {

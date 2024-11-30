@@ -1,10 +1,8 @@
 package com.dsp.bulletin1.dto;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import com.dsp.bulletin1.entity.Bulletin1Docs;
 import com.dsp.bulletin1.entity.enums.Status;
 
 import jakarta.validation.constraints.NotEmpty;
