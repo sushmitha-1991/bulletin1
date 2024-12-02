@@ -59,6 +59,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 	@Override
 	public Bulletin1DetailsDTO createBulletin1(Bulletin1DetailsDTO bulletin1DTO) {
 		
+        System.out.println("iiiiiiiinnnnnnnn");
         if(bulletin1DTO.getDraftStatus()==null || (!bulletin1DTO.getDraftStatus()) )
         { 
             bulletin1DTO.setDraftStatus(false);
@@ -97,6 +98,8 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             bulletin1DTO.setStatus(Status.SUBMITTED);
         }
             bulletin1DTO.setCurrentStatus(""+bulletin1DTO.getStatus());
+            System.out.println("insertion bbbbbbbb DDDDDDDD");
+            System.out.println(bulletin1DTO);
         Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
         LOGGER.debug("Entering save Bulletin1  with Bulletin1 DTO: {}", bulletin1Details);
         try { 
@@ -106,11 +109,12 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             System.out.println("before Appli no generation");
             System.out.println(savedBulletin);
             savedBulletin.setRefId(savedBulletin.getId());
+
             if(savedBulletin.getLokSabhaSessionNo()==null && savedBulletin.getLokSabhaNo()==null)
             {
                 String refNo=generateApplicationNo(savedBulletin.getRajyaSabhaSessionNo(),savedBulletin.getId(),
                 savedBulletin.getDraftStatus());
-                bulletin1DTO.setRefNo(refNo);
+                savedBulletin.setRefNo(refNo);
                 savedBulletin.setApplicationNo(refNo);
                 LOGGER.info(
             "Saved Bulletin1 attributes: ID={}, RajyaSabhaSessionNo={},  Status={}",
@@ -119,15 +123,17 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             else{
                 String refNo=generateApplicationNo(savedBulletin.getLokSabhaNo(),
                 savedBulletin.getLokSabhaSessionNo(),savedBulletin.getId(),savedBulletin.getDraftStatus());
-                bulletin1DTO.setRefNo(refNo);
+                savedBulletin.setRefNo(refNo);
                 savedBulletin.setApplicationNo(refNo);
             LOGGER.info(
                 "Saved Bulletin1 attributes: ID={}, LokSabhaNo={}, SessionNo={},  Status={}",
                 savedBulletin.getId(), savedBulletin.getLokSabhaNo(), 
+     
                 savedBulletin.getLokSabhaSessionNo(), savedBulletin.getStatus());
-                bulletin1DTO.setRefNo(refNo);
+                savedBulletin.setRefNo(refNo);
             }
             savedBulletin.setCurrentStatus(""+savedBulletin.getStatus());
+            
             System.out.println("after generating applno");
             System.out.println(savedBulletin);
             Bulletin1Details Bulletin = bulletin1Repository.save(savedBulletin);
@@ -224,15 +230,18 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
                 String applicationNo = generateApplicationNo(updatedBulletin1.getRajyaSabhaSessionNo(), 
                 updatedBulletin1.getId(),updatedBulletin1.getDraftStatus());
                 updatedBulletin1.setApplicationNo(applicationNo);
+                updatedBulletin1.setRefNo(applicationNo);
                 LOGGER.debug("Generated Application No for Bulletin1 RS: {}", applicationNo);
             }
             else{
                 String applicationNo = generateApplicationNo(updatedBulletin1.getLokSabhaNo(),
                 updatedBulletin1.getLokSabhaSessionNo(), updatedBulletin1.getId(),updatedBulletin1.getDraftStatus());
                 updatedBulletin1.setApplicationNo(applicationNo);
+                updatedBulletin1.setRefNo(applicationNo);
                 LOGGER.debug("Generated Application No for Bulletin1 LS: {}", applicationNo);
             }
         }
+        updatedBulletin1.setRefId(existingBulletin1.getId());
 		updatedBulletin1.setId(existingBulletin1.getId());
 		try
         {
@@ -376,126 +385,14 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             LOGGER.warn("Attempted to set a null user ID in session.");
         }
     }
-    private void validateRequiredFields(Bulletin1DetailsDTO bulletin1DTO) {
-        if (bulletin1DTO.getLokSabhaNo() == null) {
-            throw new IllegalArgumentException("Lok Sabha No is required for finalization.");
-        }
-        if (bulletin1DTO.getLokSabhaSessionNo() == null) {
-            throw new IllegalArgumentException("Session No is required for finalization.");
-        }
-    }
-       
-    // public List<Bulletin1DetailsDTO> getByLokSabhaSessionNo(Long lokSabhaSessionNo) {
-    //     List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
-    //     for (Bulletin1Details entity : bulletin1Repository.findByLokSabhaSessionNo(lokSabhaSessionNo)) 
-    //     {
-    //         Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);    
-    //         if(entity.getLokSabhaSessionNo()!=null)
-    //         {
-    //             MastersLokSabhaSessionDTO lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
-    //             dto.setLokSabhaSessionDetails(lokSabhaSession);
-    //         }
-    //         if(entity.getLokSabhaNo()!=null)
-    //         {
-    //             MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
-    //             dto.setLokSabhaDetails(lokSabha);
-    //         }
-    //         if(entity.getRajyaSabhaSessionNo()!=null)
-    //         {
-    //             MastersRajyaSabhaSessionDTO rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
-    //             dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
-    //         }
-    //         if(entity.getApproverId()!=null)
-    //         {
-    //             ApproverDTO approver=getApproverDetails(entity.getApproverId());
-    //             dto.setApproverDetails(approver); 
-            
-    //         }
-    //         dtoList.add(dto);
-    
-    //         }
-    //         return dtoList;
+    // private void validateRequiredFields(Bulletin1DetailsDTO bulletin1DTO) {
+    //     if (bulletin1DTO.getLokSabhaNo() == null) {
+    //         throw new IllegalArgumentException("Lok Sabha No is required for finalization.");
+    //     }
+    //     if (bulletin1DTO.getLokSabhaSessionNo() == null) {
+    //         throw new IllegalArgumentException("Session No is required for finalization.");
+    //     }
     // }
-
-
-    // @Override
-    // public List<Bulletin1DetailsDTO> getAllBulletin1Details(Long sessionNo, Long lokSabhaNo,Long rajyaShabhaSession, Boolean draftStatus) {
-    // List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
-    // List<Bulletin1Details> entitys;
-    // if(draftStatus==null)
-    //     {
-    //         draftStatus=false;
-    //     }
-    //     // if(lokSabhaNo==null)
-    //     // {
-    //     //     sessionNo=2l;
-    //     //     lokSabhaNo=1l;
-    //     // }
-    //     // if(rajyaShabhaSession==null)
-    //     // {
-    //     //     rajyaShabhaSession=1l;
-    //     // }
-    //     if(lokSabhaNo!=null)
-    //     {
-    //         if(sessionNo==null)
-    //         {
-    //     entitys = bulletin1Repository.findByLokSabhaNo(lokSabhaNo, draftStatus);
-    //         }
-    //         else{
-
-    //         }
-    //     }
-    //     if (lokSabhaNo!=null && sessionNo != null) 
-    //     {
-    //         // entitys = bulletin1Repository.findByLokSabhaSessionNoAndDraftStatus(sessionNo, lokSabhaNo, draftStatus);
-    //     } 
-    //     if(rajyaShabhaSession!=null)
-    //     {
-    //         entitys = bulletin1Repository.findByRajyaSabhaSessionNoAndDraftStatus(rajyaShabhaSession, draftStatus);
-
-    //     }
-    //     // else if (lokSabhaNo!=null && sessionNo != null) {
-    //     //     entitys = bulletin1Repository.findByLokSabhaSession(sessionNo, lokSabhaNo);
-    //     // } else if (rajyaShabhaSession != null) {
-    //     //     entitys = bulletin1Repository.findByRajyaSabhaSession(rajyaShabhaSession);
-    //     // } else if(draftStatus!=null)
-    //     // {
-    //     //     entitys = bulletin1Repository.findBydraftStatus(draftStatus);
-    //     // } 
-    //     else
-    //      {
-    //         draftStatus=false;
-    //         entitys = bulletin1Repository.findBydraftStatus(draftStatus);
-    //      }
-    //     for (Bulletin1Details entity : entitys ) 
-    //     {
-    //         Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity); 
-
-    //         if(entity.getLokSabhaSessionNo()!=null)
-    //         {
-    //             MastersLokSabhaSessionDTO lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
-    //             dto.setLokSabhaSessionDetails(lokSabhaSession);
-    //         }
-    //         if(entity.getLokSabhaNo()!=null)
-    //         {
-    //             MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
-    //             dto.setLokSabhaDetails(lokSabha);
-    //         }
-    //         if(entity.getRajyaSabhaSessionNo()!=null)
-    //         {
-    //             MastersRajyaSabhaSessionDTO rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
-    //             dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
-    //         }
-    //         if(entity.getApproverId()!=null)
-    //         {
-    //             ApproverDTO approver=getApproverDetails(entity.getApproverId());
-    //             dto.setApproverDetails(approver); 
-    //         }  
-    //         dtoList.add(dto);    
-    //     }
-    //     return dtoList;
-    // }
-
     @Override
     public List<Bulletin1DetailsDTO> getBulletin1s(Boolean isActive, Boolean draftStatus,Long lokSabhaNo,
      Long lokSabhaSessionNo, Long rajyaSabhaSessionNo,LocalDate startDate,LocalDate endDate) 
