@@ -399,6 +399,8 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
     {
     List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
     List<Bulletin1Details> entitys;
+    System.out.println("sssssssssssssssssss");
+    System.out.println(draftStatus);
         if(draftStatus==null)
         {
             draftStatus=false;
@@ -509,6 +511,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
                 }
                 else
                 {
+                    System.out.println("getAll active and status true or false");
                     entitys= bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
                     .and(Bulletin1Spec.hasDraftStatus(draftStatus))).stream().collect(Collectors.toList());
                 }

@@ -63,7 +63,7 @@ public class Bulletin1DetailsController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Bulletin1 Details retrieved successfully"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("/get/all")
+	@GetMapping("/getAll")
     public List<Bulletin1DetailsDTO> getAllBulletin1Details(
 		@RequestParam(required = false) Boolean isActive,
 		@RequestParam(required = false) Boolean draftStatus,
@@ -102,17 +102,17 @@ public class Bulletin1DetailsController {
 				"Bulletin1 Details retrieved successfully.", bulletin1DTO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	@Operation(summary = "Get all Bulletin1s", description = "Retrieves a list of all Bulletin1s.")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Bulletin Details retrieved successfully"),
-			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("/getAll")
-	public ResponseEntity<GenericResponse<List<Bulletin1DetailsDTO>>> getAllbulletin1s() {
-		List<Bulletin1DetailsDTO> bulletin1DTO = service.getAllBulletin1s();
-		GenericResponse<List<Bulletin1DetailsDTO>> response = new GenericResponse<>(HttpStatus.OK.value(), true,
-				"All Bulletin1 Details retrieved successfully.", bulletin1DTO);
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+	// @Operation(summary = "Get all Bulletin1s", description = "Retrieves a list of all Bulletin1s.")
+	// @ApiResponses(value = {
+	// 		@ApiResponse(responseCode = "200", description = "Bulletin Details retrieved successfully"),
+	// 		@ApiResponse(responseCode = "500", description = "Internal server error") })
+	// @GetMapping("/getAll")
+	// public ResponseEntity<GenericResponse<List<Bulletin1DetailsDTO>>> getAllbulletin1s() {
+	// 	List<Bulletin1DetailsDTO> bulletin1DTO = service.getAllBulletin1s();
+	// 	GenericResponse<List<Bulletin1DetailsDTO>> response = new GenericResponse<>(HttpStatus.OK.value(), true,
+	// 			"All Bulletin1 Details retrieved successfully.", bulletin1DTO);
+	// 	return new ResponseEntity<>(response, HttpStatus.OK);
+	// }
 }
 
 
