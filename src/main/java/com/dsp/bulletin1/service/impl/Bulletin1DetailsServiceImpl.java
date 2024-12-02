@@ -220,7 +220,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 
         if(bulletin1DTO.getStatus()==null)
         {
-            bulletin1DTO.setStatus(Status.SUBMITTED);
+            bulletin1DTO.setStatus(Status.In_Progress);
         }
 		Bulletin1Details updatedBulletin1= Bulletin1DetailsMapper.toEntity(bulletin1DTO);
         if(updatedBulletin1.getApplicationNo()!=null || updatedBulletin1.getApplicationNo().startsWith("D"))

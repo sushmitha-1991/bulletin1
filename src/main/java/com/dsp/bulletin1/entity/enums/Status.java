@@ -9,6 +9,7 @@ SUBMITTED,
 IN_PROGRESS,
 RETURNED,
 DRAFTED,
+COMPLETED,
 Active,
 Inactive,
 In_Active,
@@ -21,5 +22,6 @@ InProgress,
 Return,
 Returned,
 Draft,
-Drafted
+Drafted,
+Completed
 }
