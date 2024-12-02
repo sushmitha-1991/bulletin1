@@ -105,6 +105,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             LOGGER.debug("Saved Bulletin1 entity: {}", savedBulletin);
             System.out.println("before Appli no generation");
             System.out.println(savedBulletin);
+            savedBulletin.setRefId(savedBulletin.getId());
             if(savedBulletin.getLokSabhaSessionNo()==null && savedBulletin.getLokSabhaNo()==null)
             {
                 String refNo=generateApplicationNo(savedBulletin.getRajyaSabhaSessionNo(),savedBulletin.getId(),
@@ -120,14 +121,12 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
                 savedBulletin.getLokSabhaSessionNo(),savedBulletin.getId(),savedBulletin.getDraftStatus());
                 bulletin1DTO.setRefNo(refNo);
                 savedBulletin.setApplicationNo(refNo);
-
             LOGGER.info(
                 "Saved Bulletin1 attributes: ID={}, LokSabhaNo={}, SessionNo={},  Status={}",
                 savedBulletin.getId(), savedBulletin.getLokSabhaNo(), 
                 savedBulletin.getLokSabhaSessionNo(), savedBulletin.getStatus());
                 bulletin1DTO.setRefNo(refNo);
             }
-
             savedBulletin.setCurrentStatus(""+savedBulletin.getStatus());
             System.out.println("after generating applno");
             System.out.println(savedBulletin);
@@ -152,6 +151,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             .applicationId(responseDTO.getApplicationId())
             .applicationNo(responseDTO.getApplicationNo())
             .currentStatus(responseDTO.getCurrentStatus())
+            .refId(responseDTO.getRefId())
             .build());
             return responseDTO;
         } catch (Exception e) {
