@@ -66,11 +66,13 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             {
                 String refNo=generateApplicationNo(bulletin1DTO.getRajyaSabhaSessionNo(),bulletin1DTO.getId(),
                 bulletin1DTO.getDraftStatus());
+                bulletin1DTO.setRefNo(refNo);
                 bulletin1DTO.setApplicationNo(refNo);
             }
             else{
                 String refNo=generateApplicationNo(bulletin1DTO.getLokSabhaNo(),
                 bulletin1DTO.getLokSabhaSessionNo(),bulletin1DTO.getId(),bulletin1DTO.getDraftStatus());
+                bulletin1DTO.setRefNo(refNo);
                 bulletin1DTO.setApplicationNo(refNo);
             }
         }
@@ -80,11 +82,13 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             {
                 String refNo=generateApplicationNo(bulletin1DTO.getRajyaSabhaSessionNo(),bulletin1DTO.getId(),
                 bulletin1DTO.getDraftStatus());
+                bulletin1DTO.setRefNo(refNo);
                 bulletin1DTO.setApplicationNo(refNo);
             }
             else{
                 String refNo=generateApplicationNo(bulletin1DTO.getLokSabhaNo(),
                 bulletin1DTO.getLokSabhaSessionNo(),bulletin1DTO.getId(),bulletin1DTO.getDraftStatus());
+                bulletin1DTO.setRefNo(refNo);
                 bulletin1DTO.setApplicationNo(refNo);
             }
         }
@@ -105,6 +109,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             {
                 String refNo=generateApplicationNo(savedBulletin.getRajyaSabhaSessionNo(),savedBulletin.getId(),
                 savedBulletin.getDraftStatus());
+                bulletin1DTO.setRefNo(refNo);
                 savedBulletin.setApplicationNo(refNo);
                 LOGGER.info(
             "Saved Bulletin1 attributes: ID={}, RajyaSabhaSessionNo={},  Status={}",
@@ -113,12 +118,14 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             else{
                 String refNo=generateApplicationNo(savedBulletin.getLokSabhaNo(),
                 savedBulletin.getLokSabhaSessionNo(),savedBulletin.getId(),savedBulletin.getDraftStatus());
+                bulletin1DTO.setRefNo(refNo);
                 savedBulletin.setApplicationNo(refNo);
 
             LOGGER.info(
                 "Saved Bulletin1 attributes: ID={}, LokSabhaNo={}, SessionNo={},  Status={}",
                 savedBulletin.getId(), savedBulletin.getLokSabhaNo(), 
                 savedBulletin.getLokSabhaSessionNo(), savedBulletin.getStatus());
+                bulletin1DTO.setRefNo(refNo);
             }
 
             savedBulletin.setCurrentStatus(""+savedBulletin.getStatus());
@@ -177,8 +184,18 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 	public Bulletin1DetailsDTO updateBulletin1(Long id, Bulletin1DetailsDTO bulletin1DTO) {
     try
     {
+        if (!bulletin1Repository.existsById(id)) {
+            LOGGER.error("Bulletin1 not found with ID: " ,id);
+			throw new UserNotFoundException("Bulletin1 not found with ID: " + id);
+            }
+            else{
+                LOGGER.info("Bulletin1 found with ID: " ,id);
+            }
+        
 		Bulletin1Details existingBulletin1 = bulletin1Repository.findById(id)
         .orElseThrow(() -> new UserNotFoundException("Bulletin1 Details not found with ID: " + id));
+        LOGGER.info("Successfully fetched Bulletin1 with ID: {}", id);
+
         if(existingBulletin1.getDraftStatus())
         {
             bulletin1DTO.setStatus(Status.DRAFTED);
@@ -194,6 +211,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
                 bulletin1DTO.setApplicationNo(refNo);
             }
         }
+
         if(bulletin1DTO.getStatus()==null)
         {
             bulletin1DTO.setStatus(Status.SUBMITTED);
