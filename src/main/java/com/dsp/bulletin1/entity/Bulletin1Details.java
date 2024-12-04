@@ -68,8 +68,8 @@ public class Bulletin1Details extends ApplicationInstance
     	@Column(name = "documents", columnDefinition = "jsonb")
 		private List<Map<String, Object>> documents;
 		
-    	@Column(name = "code_id")
-		private Long codeId;  
+    	// @Column(name = "code_id")
+		// private Long codeId;  
 
 }
 

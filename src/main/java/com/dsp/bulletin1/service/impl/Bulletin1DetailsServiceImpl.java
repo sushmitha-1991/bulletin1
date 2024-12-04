@@ -138,19 +138,19 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             System.out.println(savedBulletin);
             Bulletin1Details Bulletin = bulletin1Repository.save(savedBulletin);
             
-            Bulletin1DocsDTO docsDTO= Bulletin1DocsDTO.builder()
-            .id(Bulletin.getId())
-            .refDocDate(Bulletin.getBulletinDate())
-            .refDocId(Bulletin.getCodeId())
-            .bulletin1Id(Bulletin.getId())
-            .build();
-            Bulletin1Docs entity=Bulletin1DocsMapper.toEntity(docsDTO);
-            LOGGER.debug("Created docsDTO for microservice call: {}", entity);
-            Bulletin1Docs savedEntity = createBulletinDocs(entity);
-            Bulletin1DocsDTO savedDocsDto=Bulletin1DocsMapper.toDTO(savedEntity);
-            LOGGER.debug("Saved BulletinDocs returned from microservice: {}", savedEntity);
+            // Bulletin1DocsDTO docsDTO= Bulletin1DocsDTO.builder()
+            // .id(Bulletin.getId())
+            // .refDocDate(Bulletin.getBulletinDate())
+            // .refDocId(Bulletin.getCodeId())
+            // .bulletin1Id(Bulletin.getId())
+            // .build();
+            // Bulletin1Docs entity=Bulletin1DocsMapper.toEntity(docsDTO);
+            // LOGGER.debug("Created docsDTO for microservice call: {}", entity);
+            // Bulletin1Docs savedEntity = createBulletinDocs(entity);
+            // Bulletin1DocsDTO savedDocsDto=Bulletin1DocsMapper.toDTO(savedEntity);
+            // LOGGER.debug("Saved BulletinDocs returned from microservice: {}", savedEntity);
             Bulletin1DetailsDTO responseDTO = Bulletin1DetailsMapper.toDTO(Bulletin);
-            responseDTO.setDocDetails(savedDocsDto);
+            // responseDTO.setDocDetails(savedDocsDto);
             LOGGER.debug("Returning Bulletin DTO with ApplicationInstanceDTO: {}", responseDTO);
             responseDTO.setApplicationInstanceDTO(ApplicationInstanceDTO.builder()
             .id(responseDTO.getId())
@@ -161,7 +161,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             .build());
             return responseDTO;
         } catch (Exception e) {
-            LOGGER.error("Error in saveListOfBusinessCreate: ", e);
+            LOGGER.error("Error in save Bulletin1: ", e);
             throw e;
         }
 		// Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);

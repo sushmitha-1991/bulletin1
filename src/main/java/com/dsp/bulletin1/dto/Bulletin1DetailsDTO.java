@@ -37,12 +37,10 @@ public class Bulletin1DetailsDTO {
     private String refNo;
     private Long approverId;
     private  Long startingPageNo;
-    private Long codeId;  
+    // private Long codeId;  
 	@NotEmpty
     private Boolean draftStatus;
     private Status status;
-    private Bulletin1DocsDTO docDetails;
-
     private List<Map<String, Object>> footNotes;
     private List<Map<String, Object>> documents;
 
