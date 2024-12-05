@@ -17,18 +17,21 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-// @Table(name = "application_instance", schema = "master")
 @Table(name = "application_instance", schema = "master")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class ApplicationInstance extends Auditable{
+public class ApplicationInstance extends Auditable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "application_instance_seq")
@@ -66,6 +69,7 @@ public class ApplicationInstance extends Auditable{
 	private String rajyaSabhaSession;
 
 	@Convert(converter = MapJsonConverter.class)
+	// @Type(JsonType.class)
 	@Column(name = "other_info", columnDefinition = "jsonb")
 	private Map<String, Object> otherInfo;
 

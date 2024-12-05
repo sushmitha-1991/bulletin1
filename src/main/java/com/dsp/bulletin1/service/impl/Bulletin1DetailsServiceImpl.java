@@ -225,10 +225,10 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
                     LOGGER.debug("Generated Application No for Bulletin1 LS: {}", applicationNo);
                 }
             }
-            updatedBulletin1.setRefId(existingBulletin1.getId());
             updatedBulletin1.setId(existingBulletin1.getId());
+            updatedBulletin1.setRefId(existingBulletin1.getId());
             try {
-                bulletin1Repository.save(updatedBulletin1);
+                updatedBulletin1=bulletin1Repository.save(updatedBulletin1);
 
             } catch (Exception e) {
                 LOGGER.error("Error in save Bulletin1 : ", e);
