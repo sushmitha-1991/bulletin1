@@ -3,6 +3,7 @@ package com.dsp.bulletin1.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,6 +24,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@Audited
 @SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable {

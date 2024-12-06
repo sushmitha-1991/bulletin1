@@ -16,6 +16,6 @@ import lombok.Setter;
 public class ApproverDTO {
 	private Long id;
 	private String username;
-	private String role;
+	private Long houseId;
 
 }

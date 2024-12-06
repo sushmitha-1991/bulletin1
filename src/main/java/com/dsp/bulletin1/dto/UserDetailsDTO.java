@@ -25,7 +25,7 @@ public class UserDetailsDTO implements UserDetails {
 
 	private String email;
 	private String password;
-	private String role;
+	private Long houseId;
 	private boolean isActive;
 
 	@Override

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.envers.Audited;
+
 import com.dsp.bulletin1.entity.enums.Status;
 
 import jakarta.persistence.Column;
@@ -21,6 +23,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Audited
 @SuperBuilder
 @Table(name ="bulletin1_details", schema="bulletin1")
 public class Bulletin1Details extends ApplicationInstance

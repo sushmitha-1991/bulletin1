@@ -28,7 +28,7 @@ public class ApproverEntity {
     @Column(name = "username", unique = true, nullable = true)
     private String username;
 
-    @Column(name = "role", nullable = true)
-    private String role;
+    @Column(name = "house_id", nullable = true)
+    private Long houseId;
 }
 

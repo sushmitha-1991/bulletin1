@@ -2,6 +2,8 @@ package com.dsp.bulletin1.entity;
 
 import java.util.Map;
 
+import org.hibernate.envers.Audited;
+
 import com.dsp.bulletin1.util.MapJsonConverter;
 
 import jakarta.persistence.Column;
@@ -26,6 +28,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Setter
 @Getter
+@Audited
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
