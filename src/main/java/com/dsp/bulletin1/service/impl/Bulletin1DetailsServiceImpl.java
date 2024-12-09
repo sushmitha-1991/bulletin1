@@ -300,7 +300,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
     }
 
     private ApproverDTO getApproverDetails(Long id) {
-        return approverRepo.findById(id)
+        return userRepository.findById(id)
                 .map(ApproverMapper::toDTO) // Convert to DTO
                 .orElse(null);
     }
