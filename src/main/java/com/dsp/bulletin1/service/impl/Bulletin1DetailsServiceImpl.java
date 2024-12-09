@@ -21,7 +21,6 @@ import com.dsp.bulletin1.entity.specification.Bulletin1Spec;
 import com.dsp.bulletin1.exception.UserNotFoundException;
 import com.dsp.bulletin1.mapper.ApproverMapper;
 import com.dsp.bulletin1.mapper.Bulletin1DetailsMapper;
-import com.dsp.bulletin1.repository.ApproverRepository;
 import com.dsp.bulletin1.repository.Bulletin1DetailsRepository;
 import com.dsp.bulletin1.repository.Bulletin1DocsRepository;
 import com.dsp.bulletin1.repository.MasterLSRepository;
@@ -42,21 +41,19 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
     private final MasterLSSRepository masterLSSRepository;
     private final MastersRSSRepository mastersRSSRepository;
     private final MyUserRepository userRepository;
-    private final ApproverRepository approverRepo;
     private final Bulletin1DocsRepository bulletinDocsRepo;
 
     @Autowired
     public Bulletin1DetailsServiceImpl(Bulletin1DetailsRepository bulletin1Repository,
             MasterLSRepository masterLSRepository, MyUserRepository userRepository,
             MasterLSSRepository masterLSSRepository, MastersRSSRepository mastersRSSRepository,
-            Bulletin1DocsRepository bulletinDocsRepo,ApproverRepository approverRepo) {
+            Bulletin1DocsRepository bulletinDocsRepo) {
         this.userRepository = userRepository;
         this.mastersRSSRepository = mastersRSSRepository;
         this.bulletin1Repository = bulletin1Repository;
         this.masterLSRepository = masterLSRepository;
         this.masterLSSRepository = masterLSSRepository;
         this.bulletinDocsRepo = bulletinDocsRepo;
-        this.approverRepo=approverRepo;
     }
 
     @Override
