@@ -1,12 +1,9 @@
 package com.dsp.bulletin1.mapper;
 
-import com.dsp.bulletin1.dto.ApplicationDTO;
 import com.dsp.bulletin1.dto.ApproverDTO;
-import com.dsp.bulletin1.entity.ApplicationEntity;
-import com.dsp.bulletin1.entity.ApproverEntity;
 import com.dsp.bulletin1.entity.BaseUser;
 public class ApproverMapper {
-        public static ApproverDTO toDTO(ApproverEntity entity) {
+        public static ApproverDTO toDTO(BaseUser entity) {
             ApproverDTO dto = new ApproverDTO();
                dto.setId(entity.getId());
                dto.setUsername(entity.getUsername());
@@ -14,8 +11,8 @@ public class ApproverMapper {
                 return dto;
             }
         
-            public static ApproverEntity toEntity(ApproverDTO dto) {
-                ApproverEntity entity = new ApproverEntity();
+            public static BaseUser toEntity(ApproverDTO dto) {
+                BaseUser entity = new BaseUser();
                 entity.setId(dto.getId());
                 entity.setUsername(dto.getUsername());   
                 entity.setHouseId(dto.getHouseId());         
