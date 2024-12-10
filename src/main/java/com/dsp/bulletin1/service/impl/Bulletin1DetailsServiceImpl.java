@@ -219,6 +219,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             Bulletin1Details updatedBulletin1 = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
             System.out.println("before applno generation bulletin1");
             System.out.println(updatedBulletin1);
+            updatedBulletin1.setId(id);
             // if (updatedBulletin1.getApplicationNo() != null || 
             // updatedBulletin1.getApplicationNo().startsWith("D")) 
             // {
@@ -240,7 +241,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
                 LOGGER.debug("Generated Application No for Bulletin1 LS: {}", applicationNo);
             // }
             }
-            updatedBulletin1.setId(existingBulletin1.getId());
+            // updatedBulletin1.setId(existingBulletin1.getId());
             updatedBulletin1.setRefId(existingBulletin1.getId());
             System.out.println("before updating bulletin1");
             System.out.println(updatedBulletin1);
