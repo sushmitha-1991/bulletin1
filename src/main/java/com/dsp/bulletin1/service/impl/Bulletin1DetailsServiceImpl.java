@@ -186,8 +186,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         System.out.println(id);
         try {
             if (!bulletin1Repository.existsById(id)) {
-            System.out.println("find by id");
-
+                System.out.println("find by id");
                 LOGGER.error("Bulletin1 not found with ID: ", id);
                 throw new UserNotFoundException("Bulletin1 not found with ID: " + id);
             } else {
