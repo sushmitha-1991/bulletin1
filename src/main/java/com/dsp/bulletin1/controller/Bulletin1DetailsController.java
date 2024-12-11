@@ -1,7 +1,7 @@
 
 package com.dsp.bulletin1.controller;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -65,8 +65,8 @@ public class Bulletin1DetailsController {
 			@RequestParam(required = false) Long lokSabhaNo,
 			@RequestParam(required = false) Long lokSabhaSessionNo,
 			@RequestParam(required = false) Long rajyaSabhaSessionNo,
-			@RequestParam(required = false) LocalDate startDate,
-			@RequestParam(required = false) LocalDate endDate) {
+			@RequestParam(required = false) LocalDateTime startDate,
+			@RequestParam(required = false) LocalDateTime endDate) {
 		// return service.getAllBulletin1Details(sessionNo);
 		return service.getBulletin1s(isActive, draftStatus, lokSabhaNo, lokSabhaSessionNo,
 				rajyaSabhaSessionNo, startDate, endDate);

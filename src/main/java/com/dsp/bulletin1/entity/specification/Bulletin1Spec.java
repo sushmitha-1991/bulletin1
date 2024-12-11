@@ -1,5 +1,5 @@
 package com.dsp.bulletin1.entity.specification;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -18,7 +18,7 @@ public class Bulletin1Spec
         return (root, query, criteriaBuilder) ->
                 draftStatus != null ? criteriaBuilder.equal(root.get("draftStatus"), draftStatus) : null;
     }
-    public static Specification<Bulletin1Details> hasDateBetween(LocalDate startDate, LocalDate endDate) {
+    public static Specification<Bulletin1Details> hasDateBetween(LocalDateTime startDate, LocalDateTime endDate) {
         return (root, query, criteriaBuilder) -> 
         {
             if (startDate != null && endDate != null) {

@@ -1,6 +1,6 @@
 package com.dsp.bulletin1.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -29,5 +29,5 @@ public interface Bulletin1DetailsService {
         // List<Bulletin1DetailsDTO> getByLokSabhaSessionNo(Long lokSabhaNo);			
 
         List<Bulletin1DetailsDTO> getBulletin1s(Boolean isActive, Boolean saveAsDraft,Long lokSabhaNo,
-        Long lokSabhaSessionNo, Long rajyaSabhaSessionNo,LocalDate startDate,LocalDate endDate);
+        Long lokSabhaSessionNo, Long rajyaSabhaSessionNo,LocalDateTime startDate,LocalDateTime endDate);
 }

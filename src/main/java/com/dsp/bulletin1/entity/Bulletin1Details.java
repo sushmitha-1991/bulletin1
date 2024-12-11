@@ -1,6 +1,6 @@
 package com.dsp.bulletin1.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class Bulletin1Details extends ApplicationInstance
 		private Long bulletinNo;
 
 		@Column(name = "bulletin_date", nullable = false)
-		private LocalDate bulletinDate;
+		private LocalDateTime bulletinDate;
 		
 		@Column(name = "bulletin_date_hindi")
 		private String bulletinDateHindi;

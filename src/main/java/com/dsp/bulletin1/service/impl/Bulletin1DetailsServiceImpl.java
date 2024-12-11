@@ -1,6 +1,6 @@
 package com.dsp.bulletin1.service.impl;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
     @Override
     public Bulletin1DetailsDTO createBulletin1(Bulletin1DetailsDTO bulletin1DTO) {
 
-        System.out.println("iiiiiiiinnnnnnnn");
+        System.out.println("*****************");
         if (bulletin1DTO.getDraftStatus() == null || (!bulletin1DTO.getDraftStatus())) {
             bulletin1DTO.setDraftStatus(false);
             if (bulletin1DTO.getLokSabhaSessionNo() == null && bulletin1DTO.getLokSabhaNo() == null) {
@@ -91,7 +91,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             bulletin1DTO.setStatus(Status.SUBMITTED);
         }
         bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
-        System.out.println("insertion bbbbbbbb DDDDDDDD");
+        System.out.println("insertion bulletin1");
         System.out.println(bulletin1DTO);
         Bulletin1Details bulletin1Details = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
         LOGGER.debug("Entering save Bulletin1  with Bulletin1 DTO: {}", bulletin1Details);
@@ -180,13 +180,13 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 
     @Override
     public Bulletin1DetailsDTO updateBulletin1(Long id, Bulletin1DetailsDTO bulletin1DTO) {
-        System.out.println("uuuuuuuuuuuuu");
+        System.out.println("!!!!!!!!!!");
         System.out.println(bulletin1DTO);
         System.out.println("id::::::::");
         System.out.println(id);
         try {
             if (!bulletin1Repository.existsById(id)) {
-                System.out.println("find by id");
+                System.out.println("Inside exists by id bulletin1");
                 LOGGER.error("Bulletin1 not found with ID: ", id);
                 throw new UserNotFoundException("Bulletin1 not found with ID: " + id);
             } else {
@@ -385,10 +385,10 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 
     @Override
     public List<Bulletin1DetailsDTO> getBulletin1s(Boolean isActive, Boolean draftStatus, Long lokSabhaNo,
-            Long lokSabhaSessionNo, Long rajyaSabhaSessionNo, LocalDate startDate, LocalDate endDate) {
+            Long lokSabhaSessionNo, Long rajyaSabhaSessionNo, LocalDateTime startDate, LocalDateTime endDate) {
         List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
         List<Bulletin1Details> entitys;
-        System.out.println("sssssssssssssssssss");
+        System.out.println("draft status");
         System.out.println(draftStatus);
         if (draftStatus == null) {
             draftStatus = false;
@@ -457,9 +457,9 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
                         .and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo))).stream()
                         .collect(Collectors.toList());
             } else if (lokSabhaSessionNo == null && lokSabhaNo != null) {
-                System.out.println("fffffffff");
+                System.out.println("-----loksabhano---------");
                 System.out.println(lokSabhaNo);
-                System.out.println("sssssssssssss");
+                System.out.println("-----------");
                 System.out.println(lokSabhaSessionNo);
                 entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
                         .and(Bulletin1Spec.hasDraftStatus(draftStatus))

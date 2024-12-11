@@ -1,5 +1,5 @@
 package com.dsp.bulletin1.dto;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public class Bulletin1DetailsDTO {
     @NotEmpty
     private Long bulletinNo;
 	@NotEmpty
-    private LocalDate bulletinDate;
+    private LocalDateTime bulletinDate;
     private String bulletinDateHindi;
     private Long lokSabhaNo;
 
