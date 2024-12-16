@@ -41,5 +41,9 @@ public class Bulletin1Spec
         return (root, query, criteriaBuilder) -> 
         rajyaSabhaSessionNo != null ? criteriaBuilder.equal(root.get("rajyaSabhaSessionNo"), rajyaSabhaSessionNo) : null;
     }
+    public static Specification<Bulletin1Details> hasStatus( String status) {
+        return (root, query, criteriaBuilder) -> 
+        status != null ? criteriaBuilder.equal(root.get("status"), status) : null;
+    }
 }
     

@@ -29,5 +29,5 @@ public interface Bulletin1DetailsService {
         // List<Bulletin1DetailsDTO> getByLokSabhaSessionNo(Long lokSabhaNo);			
 
         List<Bulletin1DetailsDTO> getBulletin1s(Boolean isActive, Boolean saveAsDraft,Long lokSabhaNo,
-        Long lokSabhaSessionNo, Long rajyaSabhaSessionNo,LocalDateTime startDate,LocalDateTime endDate);
+        Long lokSabhaSessionNo, Long rajyaSabhaSessionNo,LocalDateTime startDate,LocalDateTime endDate,String status);
 }

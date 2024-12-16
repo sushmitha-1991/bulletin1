@@ -66,10 +66,11 @@ public class Bulletin1DetailsController {
 			@RequestParam(required = false) Long lokSabhaSessionNo,
 			@RequestParam(required = false) Long rajyaSabhaSessionNo,
 			@RequestParam(required = false) LocalDateTime startDate,
-			@RequestParam(required = false) LocalDateTime endDate) {
+			@RequestParam(required = false) LocalDateTime endDate,
+			@RequestParam(required = false) String status) {
 		// return service.getAllBulletin1Details(sessionNo);
 		return service.getBulletin1s(isActive, draftStatus, lokSabhaNo, lokSabhaSessionNo,
-				rajyaSabhaSessionNo, startDate, endDate);
+				rajyaSabhaSessionNo, startDate, endDate,status);
 	}
 	@Operation(summary = "Update Bulletin1 Details", description = "Updates a Bulletin1 Details by its ID.")
 	@ApiResponses(value = {

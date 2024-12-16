@@ -385,7 +385,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 
     @Override
     public List<Bulletin1DetailsDTO> getBulletin1s(Boolean isActive, Boolean draftStatus, Long lokSabhaNo,
-            Long lokSabhaSessionNo, Long rajyaSabhaSessionNo, LocalDateTime startDate, LocalDateTime endDate) {
+            Long lokSabhaSessionNo, Long rajyaSabhaSessionNo, LocalDateTime startDate, LocalDateTime endDate,String status) {
         List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
         List<Bulletin1Details> entitys;
         System.out.println("draft status");
@@ -404,6 +404,18 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         // {
         // lokSabhaSessionNo=getCurrentLokSabhaSession();
         // }
+        Specification<Bulletin1Details> spec = Specification.where(null);
+        spec = spec.and(Bulletin1Spec.isActive(isActive));
+        spec = spec.and(Bulletin1Spec.hasDraftStatus(draftStatus));
+        if (lokSabhaSessionNo != null)
+            spec = spec.and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo));
+        if (rajyaSabhaSessionNo != null)
+            spec = spec.and(Bulletin1Spec.hasRajyaSabhaSessionNo(rajyaSabhaSessionNo));
+        if (startDate != null || endDate != null)
+            spec = spec.and(Bulletin1Spec.hasDateBetween(startDate, endDate));
+        if (status != null)
+            spec = spec.and(Bulletin1Spec.hasStatus(status));
+
         if (startDate != null || endDate != null) {
             if (lokSabhaNo != null && lokSabhaSessionNo != null) {
                 entitys = bulletin1Repository.findAll(Specification.where(Bulletin1Spec.isActive(isActive))
