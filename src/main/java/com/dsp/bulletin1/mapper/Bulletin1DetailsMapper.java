@@ -20,7 +20,6 @@ public  interface Bulletin1DetailsMapper {
         .bulletin1Content(entity.getBulletin1Content())
         .draftStatus(entity.getDraftStatus())
         .status(entity.getStatus())
-        // .codeId(entity.getCodeId())
         .footNotes(entity.getFootNotes())
         .documents(entity.getDocuments())
         .lokSabhaNo(entity.getLokSabhaNo())
@@ -36,6 +35,7 @@ public  interface Bulletin1DetailsMapper {
         .applicationNo(entity.getApplicationNo())
         .currentStatus(entity.getCurrentStatus())
         .refId(entity.getRefId())
+        .documentDate(entity.getDocumentDate())
         .build())
         .build(); 
     }
@@ -48,7 +48,6 @@ public  interface Bulletin1DetailsMapper {
         .bulletinDateHindi(dto.getBulletinDateHindi())
         .approverId(dto.getApproverId())
         .bulletin1Content(dto.getBulletin1Content())
-        // .codeId(dto.getCodeId())
         .refNo(dto.getRefNo())
         .startingPageNo(dto.getStartingPageNo())
         .draftStatus(dto.getDraftStatus())
@@ -61,6 +60,7 @@ public  interface Bulletin1DetailsMapper {
         .applicationId(dto.getApplicationId())
         .applicationNo(dto.getApplicationNo())
         .currentStatus(dto.getCurrentStatus())
+        // .documentDate(dto.getApplicationInstanceDTO().getDocumentDate())
         .refId(dto.getRefId())
         .build(); 
     }
