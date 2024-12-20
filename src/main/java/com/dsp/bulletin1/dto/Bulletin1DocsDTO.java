@@ -27,7 +27,7 @@ public class Bulletin1DocsDTO
     private Long refDocId;
     @NotEmpty
     private Long bulletin1Id;
-    private MasterCodeDTO codes;
+    // private MasterCodeDTO codes;
     private BulletinDTO bulletin1Details;
 	}
 

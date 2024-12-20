@@ -7,33 +7,33 @@ import org.springframework.stereotype.Service;
 
 import com.dsp.bulletin1.dto.Bulletin1DocsDTO;
 import com.dsp.bulletin1.dto.BulletinDTO;
-import com.dsp.bulletin1.dto.MasterCodeDTO;
+// import com.dsp.bulletin1.dto.MasterCodeDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
 import com.dsp.bulletin1.entity.Bulletin1Docs;
 import com.dsp.bulletin1.exception.UserNotFoundException;
 import com.dsp.bulletin1.mapper.Bulletin1DocsMapper;
-import com.dsp.bulletin1.mapper.CodeMapper;
+// import com.dsp.bulletin1.mapper.CodeMapper;
 import com.dsp.bulletin1.mapper.GetBulletinMapper;
 import com.dsp.bulletin1.repository.Bulletin1DetailsRepository;
 import com.dsp.bulletin1.repository.Bulletin1DocsRepository;
-import com.dsp.bulletin1.repository.MasterCodeRepository;
+// import com.dsp.bulletin1.repository.MasterCodeRepository;
 import com.dsp.bulletin1.repository.MyUserRepository;
 import com.dsp.bulletin1.service.Bulletin1DocsService;
 @Service
 public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
 
 	private final Bulletin1DocsRepository bulletin1Repository;
-    private final MasterCodeRepository masterRepository;
+    // private final MasterCodeRepository masterRepository;
     private final MyUserRepository userRepository;
     private final Bulletin1DetailsRepository bulletin1DetailsRepository;
     // @Autowired
     // private RestTemplate restTemplate;
 	@Autowired
 	public Bulletin1DocsServiceImpl(Bulletin1DocsRepository bulletin1Repository,Bulletin1DetailsRepository bulletin1DetailsRepository,
-      MyUserRepository userRepository, MasterCodeRepository masterRepository)
+      MyUserRepository userRepository)//, MasterCodeRepository masterRepository
     {	
         this.userRepository=userRepository;
-        this.masterRepository=masterRepository;
+        // this.masterRepository=masterRepository;
         this.bulletin1Repository = bulletin1Repository;
         this.bulletin1DetailsRepository=bulletin1DetailsRepository;
 
@@ -68,11 +68,11 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
                 BulletinDTO bulletin=getBulletin1Details(entity.getBulletin1Id());
                 dto.setBulletin1Details(bulletin); 
             }
-        if(entity.getRefDocId()!=null)
-            {
-                MasterCodeDTO codes=getCodeDetails(entity.getRefDocId());
-                dto.setCodes(codes); 
-            }      
+        // if(entity.getRefDocId()!=null)
+        //     {
+        //         MasterCodeDTO codes=getCodeDetails(entity.getRefDocId());
+        //         dto.setCodes(codes); 
+        //     }      
         return dto;
     }
 
@@ -90,20 +90,20 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
                 BulletinDTO bulletin=getBulletin1Details(entity.getBulletin1Id());
                 dto.setBulletin1Details(bulletin); 
             }  
-            if(entity.getRefDocId()!=null)
-            {
-                MasterCodeDTO codes=getCodeDetails(entity.getRefDocId());
-                dto.setCodes(codes); 
-            }
+            // if(entity.getRefDocId()!=null)
+            // {
+            //     MasterCodeDTO codes=getCodeDetails(entity.getRefDocId());
+            //     dto.setCodes(codes); 
+            // }
             dtoList.add(dto);    
         }
         return dtoList;
 	}
-    private MasterCodeDTO getCodeDetails(Long id) {
-        return masterRepository.findById(id)
-            .map(CodeMapper::toDTO)  // Convert to DTO
-            .orElse(null);  // Return null if not found
-    }
+    // private MasterCodeDTO getCodeDetails(Long id) {
+    //     return masterRepository.findById(id)
+    //         .map(CodeMapper::toDTO)  // Convert to DTO
+    //         .orElse(null);  // Return null if not found
+    // }
     public BulletinDTO getBulletin1Details(Long id) {
 
         Bulletin1Details entity = bulletin1DetailsRepository.findById(id)

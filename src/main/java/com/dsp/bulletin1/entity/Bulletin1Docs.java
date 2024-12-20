@@ -37,9 +37,9 @@ import lombok.Setter;
         private Long refDocId;
         @Column(name = "bulletin1_id", nullable = false)
         private Long bulletin1Id;
-		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name = "master_codes",  referencedColumnName = "id", insertable = false, updatable = false)
-		private MasterCode codes;
+		// @ManyToOne(fetch = FetchType.LAZY)
+		// @JoinColumn(name = "master_codes",  referencedColumnName = "id", insertable = false, updatable = false)
+		// private MasterCode codes;
 		@ManyToOne(fetch = FetchType.LAZY)
 		@JoinColumn(name = "bulletin1_details",  referencedColumnName = "id", insertable = false, updatable = false)
 		private Bulletin1Details bulletin1Details;
