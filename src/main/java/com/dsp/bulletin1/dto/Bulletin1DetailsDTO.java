@@ -44,10 +44,10 @@ public class Bulletin1DetailsDTO {
     private List<Map<String, Object>> footNotes;
     private List<Map<String, Object>> documents;
 
-    private MastersLokSabhaDTO lokSabhaDetails;
-    private MastersRajyaSabhaSessionDTO rajyaSabhaSessionDetails;
-    private MastersLokSabhaSessionDTO lokSabhaSessionDetails;
-    private ApproverDTO approverDetails;
+    private MastersLokSabhaDTO lokSabhaDTO;
+    private MastersRajyaSabhaSessionDTO rajyaSabhaSessionDTO;
+    private MastersLokSabhaSessionDTO lokSabhaSessionDTO;
+    private ApproverDTO approverDTO;
 
 	//Application Instances
     private Long id;

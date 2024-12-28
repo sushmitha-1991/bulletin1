@@ -96,7 +96,6 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         serialNumberRequest.setAppId(bulletin1Details.getApplicationId());
         if (houseId == 1) {
             if (bulletin1Details.getRajyaSabhaSessionNo() == null) {
-
                 Long rajyaSabhaSession = mastersRSSRepository.findLatestByCreatedBy();
                 MastersRajyaSabhaSession session = mastersRSSRepository.findById(rajyaSabhaSession).get();
                 bulletin1Details.setRajyaSabhaSessionNo(rajyaSabhaSession);
@@ -187,90 +186,18 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         Bulletin1Details entity = bulletin1Repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Bulletin1 Details  not found with ID: " + id));
         Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);
-        // if(entity.getLokSabhaSessionNo()!=null)
-        // {
-        // MastersLokSabhaSessionDTO
-        // lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
-        // dto.setLokSabhaSessionDetails(lokSabhaSession);
-        // }
-        // if(entity.getLokSabhaNo()!=null)
-        // {
-        // MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
-        // dto.setLokSabhaDetails(lokSabha);
-        // }
-        // if(entity.getRajyaSabhaSessionNo()!=null)
-        // {
-        // MastersRajyaSabhaSessionDTO
-        // rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
-        // dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
-        // }
-        // mastersRSSRepository
-        // if (entity.getApproverId() != null) {
-        // ApproverDTO approver = getApproverDetails(entity.getApproverId());
-        // dto.setApproverDetails(approver);
-        // }
-
         return dto;
     }
-
-    // private ApproverDTO getApproverDetails(Long id) {
-    // return userRepository.findById(id)
-    // .map(ApproverMapper::toDTO) // Convert to DTO
-    // .orElse(null);
-    // }
-
-    // private Bulletin1Docs createBulletinDocs(Bulletin1Docs entity) {
-    // return bulletinDocsRepo.save(entity);
-    // }
-
     @Override
     public List<Bulletin1DetailsDTO> getAllBulletin1s() {
         List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
         for (Bulletin1Details entity : bulletin1Repository.findAll()) {
             Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);
-
-            // if(entity.getLokSabhaSessionNo()!=null)
-            // {
-            // MastersLokSabhaSessionDTO
-            // lokSabhaSession=getLokSabhaSessionDetails(entity.getLokSabhaSessionNo());
-            // dto.setLokSabhaSessionDetails(lokSabhaSession);
-            // }
-            // if(entity.getLokSabhaNo()!=null)
-            // {
-            // MastersLokSabhaDTO lokSabha=getLokSabhaDetails(entity.getLokSabhaNo());
-            // dto.setLokSabhaDetails(lokSabha);
-            // }
-            // if(entity.getRajyaSabhaSessionNo()!=null)
-            // {
-            // MastersRajyaSabhaSessionDTO
-            // rajyaSabhaSession=getRajyaSabhaSessionDetails(entity.getRajyaSabhaSessionNo());
-            // dto.setRajyaSabhaSessionDetails(rajyaSabhaSession);
-            // }
-            // if(entity.getApproverId()!=null)
-            // {
-            // ApproverDTO approver=getApproverDetails(entity.getApproverId());
-            // dto.setApproverDetails(approver);
-            // }
             dtoList.add(dto);
         }
         return dtoList;
     }
 
-    // private MastersLokSabhaSessionDTO getLokSabhaSessionDetails(Long id) {
-    // return masterLSSRepository.findById(id)
-    // .map(LokSabhaSessionMapper::toDTO) // Convert to DTO
-    // .orElse(null); // Return null if not found
-    // }
-    // private MastersRajyaSabhaSessionDTO getRajyaSabhaSessionDetails(Long id) {
-    // return mastersRSSRepository.findById(id)
-    // .map(RajyaSabhaSessionMapper::toDTO) // Convert to DTO
-    // .orElse(null);
-    // }
-    // private MastersLokSabhaDTO getLokSabhaDetails(Long id) {
-    // return masterLSRepository.findById(id)
-    // .map(LokSabhaMapper::toDTO) // Convert to DTO
-    // .orElse(null); // Return null if not found
-    // }
     @Override
     public void deletebulletin1ById(Long id) {
         if (!bulletin1Repository.existsById(id)) {
