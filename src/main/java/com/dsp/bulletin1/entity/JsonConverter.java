@@ -24,8 +24,6 @@ import java.io.IOException;
             return null;
         }
         try {
-            System.out.println("sssssssssssssss");
-            System.out.println(attribute);
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Failed to convert list of maps to JSON string: " + attribute, e);
@@ -34,8 +32,6 @@ import java.io.IOException;
 
     @Override
     public List<Map<String, Object>> convertToEntityAttribute(String dbData) {
-        System.out.println("jjjjjjjjjjjjj");
-        System.out.println(dbData);
         if (dbData == null || dbData.isEmpty()) {
             return null;
         }

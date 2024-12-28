@@ -41,8 +41,6 @@ public class Bulletin1DocsServiceImpl implements Bulletin1DocsService {
 
 	@Override
 	public Bulletin1DocsDTO createBulletin1(Bulletin1DocsDTO bulletin1DTO) {
-        System.out.println("dddddddddddd");
-        System.out.println(bulletin1DTO);
 		Bulletin1Docs Bulletin1Docs = Bulletin1DocsMapper.toEntity(bulletin1DTO);
         
 		Bulletin1Docs = bulletin1Repository.save(Bulletin1Docs);

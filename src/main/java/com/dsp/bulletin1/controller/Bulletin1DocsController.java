@@ -40,14 +40,9 @@ public class Bulletin1DocsController
 	@PostMapping("/save")
 	public ResponseEntity<GenericResponse<Bulletin1DocsDTO>> createBulletin1(@RequestBody Bulletin1DocsDTO bulletin1DocsDTO) 
 	{
-		System.out.println("fffffffff");
-		System.out.println(bulletin1DocsDTO);
 		Bulletin1DocsDTO bulletin1DTODocs = service.createBulletin1(bulletin1DocsDTO);
-		System.out.println("ggggggggg");
-		System.out.println(bulletin1DTODocs);
 		GenericResponse<Bulletin1DocsDTO> response = new GenericResponse<>(HttpStatus.CREATED.value(), true,
 				"Bulletin1 Docs created successfully.",bulletin1DTODocs );
-				System.out.println(response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	@PutMapping("update/{id}")
