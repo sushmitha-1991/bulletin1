@@ -2,6 +2,7 @@ package com.dsp.bulletin1.entity;
 import java.time.LocalDate;
 
 import org.hibernate.annotations.Immutable;
+import org.hibernate.envers.Audited;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.Setter;
     
     @Data
     @Setter
-    // @Immutable
+    @Audited
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor

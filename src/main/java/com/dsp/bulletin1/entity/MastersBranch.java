@@ -1,5 +1,7 @@
 package com.dsp.bulletin1.entity;
+
 import org.hibernate.annotations.Immutable;
+import org.hibernate.envers.Audited;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,16 +14,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-    
-    @Entity
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    // @Immutable
-    @Builder
-    @Table(name ="offices",schema = "master")
-public class MastersBranch  extends Auditable
-{
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Audited
+@Builder
+@Table(name = "offices", schema = "master")
+public class MastersBranch extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_seq")
     @SequenceGenerator(name = "branch_seq", sequenceName = "branch_seq", allocationSize = 1)
@@ -38,5 +39,5 @@ public class MastersBranch  extends Auditable
 
     @Column(name = "house_id", nullable = false)
     private Long houseId;
-  
+
 }

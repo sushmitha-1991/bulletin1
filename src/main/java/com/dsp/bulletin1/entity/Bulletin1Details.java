@@ -11,6 +11,8 @@ import com.dsp.bulletin1.entity.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -57,8 +59,10 @@ public class Bulletin1Details extends ApplicationInstance
 	
 		@Column(name = "draft_status", nullable = false)
 		private Boolean draftStatus;
+
 		@Column(name="status")
 		private Status status;
+		
 		@Column(name="starting_page_no")
 		private  Long startingPageNo;
 		
@@ -66,14 +70,19 @@ public class Bulletin1Details extends ApplicationInstance
     	@Column(name = "foot_notes", columnDefinition = "jsonb")
 		private List<Map<String, Object>> footNotes;
 
-		
 		@Convert(converter = JsonConverter.class)
     	@Column(name = "documents", columnDefinition = "jsonb")
 		private List<Map<String, Object>> documents;
 		
-    	// @Column(name = "code_id")
-		// private Long codeId;  
-
+		@ManyToOne
+		@JoinColumn(name = "lok_sabha_session_no",referencedColumnName = "id",insertable=false, updatable=false)
+		private MastersLokSabhaSession lokSabhaSessionDetails;
+		@ManyToOne
+		@JoinColumn(name = "rajya_sabha_session_no",referencedColumnName = "id",insertable=false, updatable=false)
+		private MastersRajyaSabhaSession rajyaSabhaSessionDetails;
+		@ManyToOne
+		@JoinColumn(name = "approver_id",referencedColumnName = "id",insertable=false, updatable=false)
+		private BaseUser approverDetails;
 }
 
 	    
