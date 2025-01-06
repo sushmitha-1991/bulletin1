@@ -1,5 +1,6 @@
 package com.dsp.bulletin1.service.impl;
 
+import java.lang.reflect.Field;
 import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -163,24 +164,46 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             Bulletin1Details existingBulletin1 = bulletin1Repository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException("Bulletin1 Details not found with ID: " + id));
             LOGGER.info("Successfully fetched Bulletin1 with ID: {}", id);
-            bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
             Bulletin1Details updatedBulletin1 = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
-            updatedBulletin1.setDocumentDate(updatedBulletin1.getBulletinDate().toLocalDate());
-            updatedBulletin1.setId(id);
-            updatedBulletin1 = bulletin1Repository.save(updatedBulletin1);
-            LOGGER.debug("Updated bulletin1 entity with Application No: {}", updatedBulletin1);
-            if (updatedBulletin1.getLokSabhaSessionNo() == null && updatedBulletin1.getLokSabhaNo() == null) {
-                LOGGER.info(
-                        "Saved Bulletin1 generate attributes: ID={}, RajyaSabhaSessionNo={},  Status={}",
-                        updatedBulletin1.getId(), updatedBulletin1.getRajyaSabhaSessionNo(),
-                        updatedBulletin1.getStatus());
-            } else {
-                LOGGER.info(
-                        "Saved Bulletin1 generate attributes: ID={}, LokSabhaNo={}, SessionNo={},  Status={}",
-                        updatedBulletin1.getId(), updatedBulletin1.getLokSabhaNo(),
-                        updatedBulletin1.getLokSabhaSessionNo(), updatedBulletin1.getStatus());
+            Field[] fields = updatedBulletin1.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true); // Allow access to private fields
+                try {
+                    Object newValue = field.get(updatedBulletin1);
+                    if (newValue != null) {
+                        Field entityField = existingBulletin1.getClass().getDeclaredField(field.getName());
+                        entityField.setAccessible(true);
+                        entityField.set(existingBulletin1, newValue);
+                    }
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException("Error updating field: " + field.getName(), e);
+                }
             }
-            return Bulletin1DetailsMapper.toDTO(updatedBulletin1);
+            existingBulletin1.setCurrentStatus(""+existingBulletin1.getStatus());
+            existingBulletin1.setDocumentDate(existingBulletin1.getBulletinDate().toLocalDate());
+            bulletin1Repository.save(existingBulletin1);
+            LOGGER.debug("Updated Bulletin2 entity with Application No: {}", existingBulletin1);
+
+            // ApplicationInstanceDTO applicationInstanceDTO =
+            // ApplicationInstanceDTO.builder()
+            // .id(updatedEntityBulletin2.getId())
+            // .applicationId(updatedEntityBulletin2.getId())
+            // .applicationNo(updatedEntityBulletin2.getApplicationNo())
+            // .currentStatus(updatedEntityBulletin2.getCurrentStatus())
+            // .refId(updatedEntityBulletin2.getRefId())
+            // .build();
+            // LOGGER.debug("Updated ApplicationInstanceDTO for microservice call: {}",
+            // applicationInstanceDTO);
+           return Bulletin1DetailsMapper.toDTO(existingBulletin1);
+    
+            // bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
+            // Bulletin1Details updatedBulletin1 = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
+            // updatedBulletin1.setDocumentDate(updatedBulletin1.getBulletinDate().toLocalDate());
+            // updatedBulletin1.setId(id);
+            // updatedBulletin1 = bulletin1Repository.save(updatedBulletin1);
+            // LOGGER.debug("Updated bulletin1 entity with Application No: {}", updatedBulletin1);
+            
+            // return Bulletin1DetailsMapper.toDTO(updatedBulletin1);
         } catch (Exception e) {
             LOGGER.error("Error in save Bulletin1 : ", e);
             throw e;
