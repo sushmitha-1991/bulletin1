@@ -97,10 +97,13 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         if (houseId == 1) {
             if (bulletin1Details.getRajyaSabhaSessionNo() == null) {
                 Long rajyaSabhaSession = mastersRSSRepository.findLatestByCreatedBy();
-                MastersRajyaSabhaSession session = mastersRSSRepository.findById(rajyaSabhaSession).get();
                 bulletin1Details.setRajyaSabhaSessionNo(rajyaSabhaSession);
-                bulletin1Details.setRajyaSabhaSession(session.getSessionNumber());
             }
+            MastersRajyaSabhaSession session = mastersRSSRepository.findById(bulletin1Details.getRajyaSabhaSessionNo())
+                    .get();
+
+            bulletin1Details.setRajyaSabhaSession(session.getSessionNumber());
+
             bulletin1Details.setLokSabhaNo(null);
             bulletin1Details.setLokSabhaSessionNo(null);
             serialNumberRequest.setSessionId(bulletin1Details.getRajyaSabhaSessionNo());
@@ -108,12 +111,15 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         } else if (houseId == 2) {
             if (bulletin1Details.getLokSabhaSessionNo() == null) {
                 Long lokSabhaSession = masterLSSRepository.findLatestByCreatedBy();
-                MastersLokSabhaSession session = masterLSSRepository.findById(lokSabhaSession).get();
                 bulletin1Details.setLokSabhaSessionNo(lokSabhaSession);
-                bulletin1Details.setLokSabhaSessionNumber(session.getSessionNumber());
-                bulletin1Details.setLokSabhaNo(session.getLokSabha().getId());
-                bulletin1Details.setLokSabhaSession(session.getLokSabha().getLokSabhaNumber());
+
             }
+            MastersLokSabhaSession session = masterLSSRepository.findById(bulletin1Details.getLokSabhaSessionNo())
+                    .get();
+
+            bulletin1Details.setLokSabhaSessionNumber(session.getSessionNumber());
+            bulletin1Details.setLokSabhaNo(session.getLokSabha().getId());
+            bulletin1Details.setLokSabhaSession(session.getLokSabha().getLokSabhaNumber());
             bulletin1Details.setRajyaSabhaSessionNo(null);
             serialNumberRequest.setSessionId(bulletin1Details.getLokSabhaSessionNo());
         }
@@ -188,6 +194,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);
         return dto;
     }
+
     @Override
     public List<Bulletin1DetailsDTO> getAllBulletin1s() {
         List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
@@ -293,7 +300,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         HttpEntity<SerialNumberRequest> entity = new HttpEntity<>(request, headers);
         try {
             // RestTemplate restTemplate = new RestTemplate();
-            LOGGER.info("getting application no using Api Call",entity);
+            LOGGER.info("getting application no using Api Call", entity);
 
             return restTemplate.postForObject(url, entity, SerialNumberResponse.class);
         } catch (Exception e) {
