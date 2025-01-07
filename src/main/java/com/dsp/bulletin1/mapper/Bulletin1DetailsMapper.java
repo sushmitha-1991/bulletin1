@@ -41,6 +41,9 @@ public interface Bulletin1DetailsMapper {
                         .currentStatus(entity.getCurrentStatus())
                         .refId(entity.getRefId())
                         .documentDate(entity.getDocumentDate())
+                        .lokSabhaSession(entity.getLokSabhaSession())
+                        .lokSabhaSessionNumber(entity.getLokSabhaSessionNumber())
+                        .rajyaSabhaSession(entity.getRajyaSabhaSession())
                         .build())
                 .build();
 

@@ -1,7 +1,6 @@
 package com.dsp.bulletin1.service.impl;
 
 import java.lang.reflect.Field;
-import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,23 +17,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.dsp.bulletin1.dto.ApplicationInstanceDTO;
-import com.dsp.bulletin1.dto.ApproverDTO;
 import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
 import com.dsp.bulletin1.dto.SerialNumberRequest;
 import com.dsp.bulletin1.dto.SerialNumberResponse;
 import com.dsp.bulletin1.dto.UserDetailsDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
-import com.dsp.bulletin1.entity.Bulletin1Docs;
 import com.dsp.bulletin1.entity.MastersLokSabhaSession;
 import com.dsp.bulletin1.entity.MastersRajyaSabhaSession;
 import com.dsp.bulletin1.entity.enums.Status;
 import com.dsp.bulletin1.entity.specification.Bulletin1Spec;
 import com.dsp.bulletin1.exception.UserNotFoundException;
-import com.dsp.bulletin1.mapper.ApproverMapper;
 import com.dsp.bulletin1.mapper.Bulletin1DetailsMapper;
 import com.dsp.bulletin1.repository.Bulletin1DetailsRepository;
-import com.dsp.bulletin1.repository.Bulletin1DocsRepository;
-import com.dsp.bulletin1.repository.MasterLSRepository;
 import com.dsp.bulletin1.repository.MasterLSSRepository;
 import com.dsp.bulletin1.repository.MastersRSSRepository;
 import com.dsp.bulletin1.repository.MyUserRepository;
@@ -55,23 +49,18 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
     @Autowired
     private RestTemplate restTemplate;
     private final Bulletin1DetailsRepository bulletin1Repository;
-    private final MasterLSRepository masterLSRepository;
     private final MasterLSSRepository masterLSSRepository;
     private final MastersRSSRepository mastersRSSRepository;
     private final MyUserRepository userRepository;
-    private final Bulletin1DocsRepository bulletinDocsRepo;
 
     @Autowired
     public Bulletin1DetailsServiceImpl(Bulletin1DetailsRepository bulletin1Repository,
-            MasterLSRepository masterLSRepository, MyUserRepository userRepository,
-            MasterLSSRepository masterLSSRepository, MastersRSSRepository mastersRSSRepository,
-            Bulletin1DocsRepository bulletinDocsRepo) {
+            MyUserRepository userRepository,
+            MasterLSSRepository masterLSSRepository, MastersRSSRepository mastersRSSRepository) {
         this.userRepository = userRepository;
         this.mastersRSSRepository = mastersRSSRepository;
         this.bulletin1Repository = bulletin1Repository;
-        this.masterLSRepository = masterLSRepository;
         this.masterLSSRepository = masterLSSRepository;
-        this.bulletinDocsRepo = bulletinDocsRepo;
     }
 
     @Override
@@ -80,12 +69,19 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             bulletin1DTO.setDraftStatus(false);
         }
         if (bulletin1DTO.getDraftStatus()) {
-            bulletin1DTO.setStatus(Status.DRAFTED);
+            bulletin1DTO.setStatus(Status.Draft);
         }
         if (bulletin1DTO.getStatus() == null) {
-            bulletin1DTO.setStatus(Status.IN_PROGRESS);
+            bulletin1DTO.setStatus(Status.InProgress);
         }
-        bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
+        if(bulletin1DTO.getStatus().equals(Status.InProgress))
+        {
+            bulletin1DTO.setCurrentStatus("In Progress");
+        }
+        else
+        {
+            bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
+        }
         // Save By House
         Long houseId = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -113,17 +109,17 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             if (bulletin1Details.getLokSabhaSessionNo() == null) {
                 Long lokSabhaSession = masterLSSRepository.findLatestByCreatedBy();
                 bulletin1Details.setLokSabhaSessionNo(lokSabhaSession);
-
             }
             MastersLokSabhaSession session = masterLSSRepository.findById(bulletin1Details.getLokSabhaSessionNo())
                     .get();
-
             bulletin1Details.setLokSabhaSessionNumber(session.getSessionNumber());
             bulletin1Details.setLokSabhaNo(session.getLokSabha().getId());
             bulletin1Details.setLokSabhaSession(session.getLokSabha().getLokSabhaNumber());
             bulletin1Details.setRajyaSabhaSessionNo(null);
             serialNumberRequest.setSessionId(bulletin1Details.getLokSabhaSessionNo());
         }
+        System.out.println("entity bulletin1");
+        System.out.println(bulletin1Details);
         SerialNumberResponse application = generateApplicationNo(serialNumberRequest);
         bulletin1Details.setApplicationNo(application.getId());
         bulletin1Details.setRefNo(bulletin1Details.getApplicationNo());
@@ -137,15 +133,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             Bulletin1Details Bulletin = bulletin1Repository.save(savedBulletin);
             Bulletin1DetailsDTO responseDTO = Bulletin1DetailsMapper.toDTO(Bulletin);
             LOGGER.debug("Returning Bulletin DTO with ApplicationInstanceDTO: {}", responseDTO);
-            responseDTO.setApplicationInstanceDTO(ApplicationInstanceDTO.builder()
-                    .id(responseDTO.getId())
-                    .applicationId(responseDTO.getApplicationId())
-                    .applicationNo(responseDTO.getApplicationNo())
-                    .currentStatus(responseDTO.getCurrentStatus())
-                    .refId(responseDTO.getRefId())
-                    .documentDate(Bulletin.getDocumentDate())
-                    .build());
-            return responseDTO;
+             return responseDTO;
         } catch (Exception e) {
             LOGGER.error("Error in save Bulletin1: ", e);
             throw e;
@@ -183,27 +171,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             existingBulletin1.setDocumentDate(existingBulletin1.getBulletinDate().toLocalDate());
             bulletin1Repository.save(existingBulletin1);
             LOGGER.debug("Updated Bulletin2 entity with Application No: {}", existingBulletin1);
-
-            // ApplicationInstanceDTO applicationInstanceDTO =
-            // ApplicationInstanceDTO.builder()
-            // .id(updatedEntityBulletin2.getId())
-            // .applicationId(updatedEntityBulletin2.getId())
-            // .applicationNo(updatedEntityBulletin2.getApplicationNo())
-            // .currentStatus(updatedEntityBulletin2.getCurrentStatus())
-            // .refId(updatedEntityBulletin2.getRefId())
-            // .build();
-            // LOGGER.debug("Updated ApplicationInstanceDTO for microservice call: {}",
-            // applicationInstanceDTO);
            return Bulletin1DetailsMapper.toDTO(existingBulletin1);
-    
-            // bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
-            // Bulletin1Details updatedBulletin1 = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
-            // updatedBulletin1.setDocumentDate(updatedBulletin1.getBulletinDate().toLocalDate());
-            // updatedBulletin1.setId(id);
-            // updatedBulletin1 = bulletin1Repository.save(updatedBulletin1);
-            // LOGGER.debug("Updated bulletin1 entity with Application No: {}", updatedBulletin1);
-            
-            // return Bulletin1DetailsMapper.toDTO(updatedBulletin1);
         } catch (Exception e) {
             LOGGER.error("Error in save Bulletin1 : ", e);
             throw e;

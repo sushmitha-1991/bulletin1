@@ -1,27 +1,14 @@
 package com.dsp.bulletin1.entity.enums;
 
 public enum Status {
-ACTIVE,
-INACTIVE,
-PENDING,
-APPROVED,
-SUBMITTED,
-IN_PROGRESS,
-RETURNED,
-DRAFTED,
-COMPLETED,
-Active,
-Inactive,
-In_Active,
-InActive,
-Pending,
-Approved,
-Submitted,
-In_Progress,
-InProgress,
-Return,
-Returned,
-Draft,
-Drafted,
-Completed
+    Active,
+    InActive,
+    Pending,
+    Approved,
+    Submitted,
+    InProgress,
+    Returned,
+    Draft,
+    Completed,
+    Published
 }
