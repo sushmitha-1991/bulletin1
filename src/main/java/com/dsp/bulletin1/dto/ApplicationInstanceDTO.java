@@ -2,6 +2,7 @@ package com.dsp.bulletin1.dto;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,8 @@ public class ApplicationInstanceDTO {
 	private LocalDate documentDate;
 	// private String publishedDocumentUrl;
 	private Long refId;
+	private String lokSabhaSession;
+	private String lokSabhaSessionNumber;
+	private String rajyaSabhaSession;
 	// private String processInstanceId;
 }
