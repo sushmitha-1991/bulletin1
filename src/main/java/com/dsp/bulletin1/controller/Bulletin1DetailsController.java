@@ -1,6 +1,7 @@
 
 package com.dsp.bulletin1.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -65,13 +66,14 @@ public class Bulletin1DetailsController {
 			@RequestParam(required = false) Long lokSabhaNo,
 			@RequestParam(required = false) Long lokSabhaSessionNo,
 			@RequestParam(required = false) Long rajyaSabhaSessionNo,
-			@RequestParam(required = false) LocalDateTime startDate,
-			@RequestParam(required = false) LocalDateTime endDate,
+			@RequestParam(required = false) LocalDate startDate,
+			@RequestParam(required = false) LocalDate endDate,
 			@RequestParam(required = false) String status) {
 		// return service.getAllBulletin1Details(sessionNo);
 		return service.getBulletin1s(isActive, draftStatus, lokSabhaNo, lokSabhaSessionNo,
-				rajyaSabhaSessionNo, startDate, endDate,status);
+				rajyaSabhaSessionNo, startDate, endDate, status);
 	}
+
 	@Operation(summary = "Update Bulletin1 Details", description = "Updates a Bulletin1 Details by its ID.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Bulletin1 Details updated successfully"),
@@ -97,6 +99,5 @@ public class Bulletin1DetailsController {
 				"Bulletin1 Details retrieved successfully.", bulletin1DTO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
-}
 
+}

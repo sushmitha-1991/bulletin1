@@ -1,5 +1,6 @@
 package com.dsp.bulletin1.dto;
-import java.time.LocalDateTime;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +25,12 @@ import lombok.Setter;
 public class Bulletin1DetailsDTO {
     @NotEmpty
     private Long bulletinNo;
-	@NotEmpty
-    private LocalDateTime bulletinDate;
+    @NotEmpty
+    // private LocalDateTime bulletinDate;
+    // private Date bulletinDate;
+    private String bulletinDate;
+
+
     private String bulletinDateHindi;
     private Long lokSabhaNo;
 
@@ -36,9 +41,9 @@ public class Bulletin1DetailsDTO {
     @NotEmpty
     private String refNo;
     private Long approverId;
-    private  Long startingPageNo;
-    // private Long codeId;  
-	@NotEmpty
+    private Long startingPageNo;
+    // private Long codeId;
+    @NotEmpty
     private Boolean draftStatus;
     private Status status;
     private List<Map<String, Object>> footNotes;
@@ -49,11 +54,11 @@ public class Bulletin1DetailsDTO {
     private MastersLokSabhaSessionDTO lokSabhaSessionDTO;
     private ApproverDTO approverDTO;
 
-	//Application Instances
+    // Application Instances
     private Long id;
     private Long applicationId; // Reference to Application ID
     private String applicationNo;
     private String currentStatus;
     private Long refId;
     private ApplicationInstanceDTO applicationInstanceDTO;
-	}
+}

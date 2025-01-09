@@ -1,5 +1,8 @@
 package com.dsp.bulletin1.mapper;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.mapstruct.Mapper;
 
 import com.dsp.bulletin1.dto.ApplicationInstanceDTO;
@@ -17,7 +20,7 @@ public interface Bulletin1DetailsMapper {
         Bulletin1DetailsDTO dto = Bulletin1DetailsDTO.builder()
                 .id(entity.getId())
                 .bulletinNo(entity.getBulletinNo())
-                .bulletinDate(entity.getBulletinDate())
+                .bulletinDate(""+entity.getBulletinDate())
                 .bulletinDateHindi(entity.getBulletinDateHindi())
                 .approverId(entity.getApproverId())
                 .refNo(entity.getRefNo())
@@ -76,7 +79,8 @@ public interface Bulletin1DetailsMapper {
         return Bulletin1Details.builder()
                 .id(dto.getId())
                 .bulletinNo(dto.getBulletinNo())
-                .bulletinDate(dto.getBulletinDate())
+                // .bulletinDate(dto.getBulletinDate())
+                .bulletinDate(LocalDateTime.parse(dto.getBulletinDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .bulletinDateHindi(dto.getBulletinDateHindi())
                 .approverId(dto.getApproverId())
                 .bulletin1Content(dto.getBulletin1Content())

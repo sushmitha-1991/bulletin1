@@ -1,7 +1,9 @@
 package com.dsp.bulletin1.service.impl;
 
 import java.net.http.HttpRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +108,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             serialNumberRequest.setSessionId(bulletin1Details.getRajyaSabhaSessionNo());
 
         } else if (houseId == 2) {
-            if (bulletin1Details.getLokSabhaSessionNo() == null) {
+            if (bulletin1Details.getLokSabhaSessionNo() == null || bulletin1Details.getLokSabhaNo() == null) {
                 Long lokSabhaSession = masterLSSRepository.findLatestByCreatedBy();
                 MastersLokSabhaSession session = masterLSSRepository.findById(lokSabhaSession).get();
                 bulletin1Details.setLokSabhaSessionNo(lokSabhaSession);
@@ -123,7 +125,18 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         LOGGER.debug("Entering save Bulletin1  with Bulletin1 DTO: {}", bulletin1Details);
         try {
             LOGGER.debug("Converted Bulletin1 DTO to entity: {}", bulletin1Details);
-            bulletin1Details.setDocumentDate(bulletin1Details.getBulletinDate().toLocalDate());
+            // bulletin1Details.setDocumentDate(bulletin1Details.getBulletinDate().toLocalDate());
+            System.out.println("date change");
+            System.out.println(bulletin1Details.getBulletinDate());
+            System.out.println("bulletin Date Conversion");
+            System.out.println(bulletin1Details.getBulletinDate());
+            bulletin1Details.setDocumentDate(
+                    bulletin1Details.getBulletinDate().toLocalDate());
+            System.out.println("documentDate");
+            System.out.println(bulletin1Details.getDocumentDate());
+            // date.toInstant()
+            // .atZone(ZoneId.systemDefault())
+            // .toLocalDate();
             Bulletin1Details savedBulletin = bulletin1Repository.save(bulletin1Details);
             LOGGER.debug("Saved Bulletin1 entity: {}", savedBulletin);
             savedBulletin.setRefId(savedBulletin.getId());
@@ -159,7 +172,10 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             LOGGER.info("Successfully fetched Bulletin1 with ID: {}", id);
             bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
             Bulletin1Details updatedBulletin1 = Bulletin1DetailsMapper.toEntity(bulletin1DTO);
-            updatedBulletin1.setDocumentDate(updatedBulletin1.getBulletinDate().toLocalDate());
+            // updatedBulletin1.setDocumentDate(updatedBulletin1.getBulletinDate().toLocalDate());
+            updatedBulletin1.setDocumentDate(
+                    updatedBulletin1.getBulletinDate().toLocalDate());
+
             updatedBulletin1.setId(id);
             updatedBulletin1 = bulletin1Repository.save(updatedBulletin1);
             LOGGER.debug("Updated bulletin1 entity with Application No: {}", updatedBulletin1);
@@ -188,6 +204,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         Bulletin1DetailsDTO dto = Bulletin1DetailsMapper.toDTO(entity);
         return dto;
     }
+
     @Override
     public List<Bulletin1DetailsDTO> getAllBulletin1s() {
         List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
@@ -229,7 +246,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
 
     @Override
     public List<Bulletin1DetailsDTO> getBulletin1s(Boolean isActive, Boolean draftStatus, Long lokSabhaNo,
-            Long lokSabhaSessionNo, Long rajyaSabhaSessionNo, LocalDateTime startDate, LocalDateTime endDate,
+            Long lokSabhaSessionNo, Long rajyaSabhaSessionNo, LocalDate startDate, LocalDate endDate,
             String status) {
         List<Bulletin1DetailsDTO> dtoList = new ArrayList<>();
         List<Bulletin1Details> entitys;
@@ -293,7 +310,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         HttpEntity<SerialNumberRequest> entity = new HttpEntity<>(request, headers);
         try {
             // RestTemplate restTemplate = new RestTemplate();
-            LOGGER.info("getting application no using Api Call",entity);
+            LOGGER.info("getting application no using Api Call", entity);
 
             return restTemplate.postForObject(url, entity, SerialNumberResponse.class);
         } catch (Exception e) {
@@ -302,5 +319,4 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             throw e;
         }
     }
-
 }
