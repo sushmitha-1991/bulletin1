@@ -65,23 +65,15 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         this.bulletin1Repository = bulletin1Repository;
         this.masterLSSRepository = masterLSSRepository;
     }
-
     @Override
     public Bulletin1DetailsDTO createBulletin1(Bulletin1DetailsDTO bulletin1DTO) {
-        if (bulletin1DTO.getDraftStatus() == null) {
-            bulletin1DTO.setDraftStatus(false);
-        }
-        if (bulletin1DTO.getDraftStatus()) {
-            bulletin1DTO.setStatus(Status.Draft);
-        }
-        if (bulletin1DTO.getStatus() == null) {
-            bulletin1DTO.setStatus(Status.InProgress);
-        }
-        if (bulletin1DTO.getStatus().equals(Status.InProgress)) {
-            bulletin1DTO.setCurrentStatus("In Progress");
+        if (bulletin1DTO.getDraftStatus() != null && bulletin1DTO.getDraftStatus()) {
+            bulletin1DTO.setStatus("Draft");
         } else {
-            bulletin1DTO.setCurrentStatus("" + bulletin1DTO.getStatus());
+            bulletin1DTO.setDraftStatus(false);
+            bulletin1DTO.setStatus("In Progress");
         }
+        bulletin1DTO.setCurrentStatus(bulletin1DTO.getStatus());
         // Save By House
         Long houseId = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

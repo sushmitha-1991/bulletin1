@@ -62,7 +62,7 @@ public class Bulletin1Details extends ApplicationInstance {
 	private Boolean draftStatus;
 
 	@Column(name = "status")
-	private Status status;
+	private String status;
 
 	@Column(name = "starting_page_no")
 	private Long startingPageNo;

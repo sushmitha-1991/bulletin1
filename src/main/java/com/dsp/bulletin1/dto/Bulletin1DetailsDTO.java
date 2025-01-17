@@ -45,7 +45,7 @@ public class Bulletin1DetailsDTO {
     // private Long codeId;
     @NotEmpty
     private Boolean draftStatus;
-    private Status status;
+    private String status;
     private List<Map<String, Object>> footNotes;
     private List<Map<String, Object>> documents;
 
