@@ -38,12 +38,10 @@ public class Bulletin1DetailsDTO {
     private Long rajyaSabhaSessionNo;
     @NotEmpty
     private String bulletin1Content;
-    @NotEmpty
     private String refNo;
     private Long approverId;
     private Long startingPageNo;
     // private Long codeId;
-    @NotEmpty
     private Boolean draftStatus;
     private String status;
     private List<Map<String, Object>> footNotes;

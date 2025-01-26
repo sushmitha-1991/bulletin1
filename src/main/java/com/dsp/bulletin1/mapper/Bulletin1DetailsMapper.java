@@ -70,7 +70,7 @@ public interface Bulletin1DetailsMapper {
             dto.setApproverDTO(ApproverDTO.builder()
                     .id(entity.getApproverDetails().getId())
                     .houseId(entity.getApproverDetails().getHouseId())
-                    .username(entity.getApproverDetails().getUsername())
+                    .username(entity.getApproverDetails().getFirstName()+" "+entity.getApproverDetails().getLastName())
                     .build());
         }
 
