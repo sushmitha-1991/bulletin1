@@ -75,9 +75,12 @@ public class ApplicationInstance extends Auditable {
 	@Column(name = "rajya_sabha_session", length = 30)
 	private String rajyaSabhaSession;
 
-	// @Convert(converter = MapJsonConverter.class)
-	// // @Type(JsonType.class)
-	// @Column(name = "other_info", columnDefinition = "jsonb")
-	// private Map<String, Object> otherInfo;
+	@Convert(converter = MapJsonConverter.class)
+	@Column(name = "other_info", columnDefinition = "jsonb")
+	private Map<String, Object> otherInfo;
+	@Column(name = "html_content_en", columnDefinition = "text")
+	private String htmlContentEnglish;
+	@Column(name = "html_content_hi", columnDefinition = "text")
+	private String htmlContentHindi;
 
 }

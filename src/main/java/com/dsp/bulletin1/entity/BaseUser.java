@@ -112,4 +112,5 @@ public class BaseUser extends Auditable implements UserDetails {
 	public Long getUserId() {
 		return this.id;
 	}
+	
 }

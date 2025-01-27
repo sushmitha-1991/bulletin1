@@ -1,12 +1,9 @@
 package com.dsp.bulletin1.service.impl;
 
-import java.net.http.HttpRequest;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.reflect.Field;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.dsp.bulletin1.dto.ApplicationInstanceDTO;
 import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
 import com.dsp.bulletin1.dto.SerialNumberRequest;
 import com.dsp.bulletin1.dto.SerialNumberResponse;
@@ -27,7 +23,6 @@ import com.dsp.bulletin1.dto.UserDetailsDTO;
 import com.dsp.bulletin1.entity.Bulletin1Details;
 import com.dsp.bulletin1.entity.MastersLokSabhaSession;
 import com.dsp.bulletin1.entity.MastersRajyaSabhaSession;
-import com.dsp.bulletin1.entity.enums.Status;
 import com.dsp.bulletin1.entity.specification.Bulletin1Spec;
 import com.dsp.bulletin1.exception.UserNotFoundException;
 import com.dsp.bulletin1.mapper.Bulletin1DetailsMapper;
@@ -114,6 +109,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         SerialNumberResponse application = generateApplicationNo(serialNumberRequest);
         bulletin1Details.setApplicationNo(application.getId());
         bulletin1Details.setRefNo(bulletin1Details.getApplicationNo());
+        bulletin1Details.setHtmlContentEnglish(bulletin1Details.getBulletin1Content());
         LOGGER.debug("Entering save Bulletin1  with Bulletin1 DTO: {}", bulletin1Details);
         try {
             LOGGER.debug("Converted Bulletin1 DTO to entity: {}", bulletin1Details);
@@ -162,6 +158,7 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             }
             existingBulletin1.setCurrentStatus("" + existingBulletin1.getStatus());
             existingBulletin1.setDocumentDate(existingBulletin1.getBulletinDate().toLocalDate());
+            existingBulletin1.setHtmlContentEnglish(existingBulletin1.getBulletin1Content());
             bulletin1Repository.save(existingBulletin1);
             LOGGER.debug("Updated Bulletin2 entity with Application No: {}", existingBulletin1);
             return Bulletin1DetailsMapper.toDTO(existingBulletin1);

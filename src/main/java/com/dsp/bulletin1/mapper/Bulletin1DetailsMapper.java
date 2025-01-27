@@ -47,6 +47,7 @@ public interface Bulletin1DetailsMapper {
                         .lokSabhaSession(entity.getLokSabhaSession())
                         .lokSabhaSessionNumber(entity.getLokSabhaSessionNumber())
                         .rajyaSabhaSession(entity.getRajyaSabhaSession())
+                        .htmlContentEnglish(entity.getBulletin1Content())
                         .build())
                 .build();
 

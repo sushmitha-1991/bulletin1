@@ -24,4 +24,6 @@ public class ApplicationInstanceDTO {
 	private String lokSabhaSessionNumber;
 	private String rajyaSabhaSession;
 	// private String processInstanceId;
+	private String htmlContentEnglish;
+	private String htmlContentHindi;
 }
