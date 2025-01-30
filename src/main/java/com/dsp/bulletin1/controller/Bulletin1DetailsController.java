@@ -48,7 +48,7 @@ public class Bulletin1DetailsController {
     public ResponseEntity<GenericResponse<Object>> createBulletin1(@RequestBody Bulletin1DetailsDTO bulletin1DTO) {
         Bulletin1DetailsDTO bulletin1DTODetails = service.createBulletin1(bulletin1DTO);
         GenericResponse<Object> response = new GenericResponse<>(HttpStatus.CREATED.value(), true,
-                "Bulletin-Part1 created successfully.", bulletin1DTODetails);
+                "Bulletin-Part I created successfully.", bulletin1DTODetails);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -71,7 +71,7 @@ public class Bulletin1DetailsController {
                 rajyaSabhaSessionNo, startDate, endDate, status);
     }
 
-    @Operation(summary = "Update Bulletin-part1 Details", description = "Updates a Bulletin1 Details by its ID.")
+    @Operation(summary = "Update Bulletin-part I Details", description = "Updates a Bulletin1 Details by its ID.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Bulletin1 Details updated successfully"),
         @ApiResponse(responseCode = "404", description = "Bulletin1 Details not found"),
@@ -82,9 +82,9 @@ public class Bulletin1DetailsController {
         Bulletin1DetailsDTO updatedbulletin1DTO = service.updateBulletin1(id, bulletin1DTO);
         String message = "";
         if (updatedbulletin1DTO.getStatus().equalsIgnoreCase("returned")) {
-            message = "Bulletin-Part1 returned successfully.";
+            message = "Bulletin-Part I returned successfully.";
         } else {
-            message = "Bulletin-Part1 updated successfully.";
+            message = "Bulletin-Part I updated successfully.";
 
         }
         GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
@@ -100,7 +100,7 @@ public class Bulletin1DetailsController {
     public ResponseEntity<GenericResponse<Bulletin1DetailsDTO>> getBulletin1ById(@PathVariable Long id) {
         Bulletin1DetailsDTO bulletin1DTO = service.getBulletin1ById(id);
         GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
-                "Bulletin-Part1 Details retrieved successfully.", bulletin1DTO);
+                "Bulletin-Part I Details retrieved successfully.", bulletin1DTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
