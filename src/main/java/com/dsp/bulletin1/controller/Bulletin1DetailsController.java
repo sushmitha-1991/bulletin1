@@ -1,8 +1,6 @@
-
 package com.dsp.bulletin1.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -28,76 +26,82 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 // import jakarta.servlet.http.HttpSession;
-
 @RestController
 @RequestMapping("/details")
 public class Bulletin1DetailsController {
 
-	private Bulletin1DetailsService service;
+    private Bulletin1DetailsService service;
 
-	@Autowired
-	public Bulletin1DetailsController(Bulletin1DetailsService service) {
-		this.service = service;
-	}
+    @Autowired
+    public Bulletin1DetailsController(Bulletin1DetailsService service) {
+        this.service = service;
+    }
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Bulletin1DetailsController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Bulletin1DetailsController.class);
 
-	@Operation(summary = "Create a new Bulletin1", description = "Creates a new Bulletin1 and returns the created Bulletin1 details.")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "Bulletin1 created successfully"),
-			@ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@PostMapping("/create")
-	public ResponseEntity<GenericResponse<Object>> createBulletin1(@RequestBody Bulletin1DetailsDTO bulletin1DTO) {
-		Bulletin1DetailsDTO bulletin1DTODetails = service.createBulletin1(bulletin1DTO);
-		GenericResponse<Object> response = new GenericResponse<>(HttpStatus.CREATED.value(), true,
-				"Bulletin1 Details created successfully.", bulletin1DTODetails);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
-	}
+    @Operation(summary = "Create a new Bulletin1", description = "Creates a new Bulletin1 and returns the created Bulletin1 details.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Bulletin1 created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")})
+    @PostMapping("/create")
+    public ResponseEntity<GenericResponse<Object>> createBulletin1(@RequestBody Bulletin1DetailsDTO bulletin1DTO) {
+        Bulletin1DetailsDTO bulletin1DTODetails = service.createBulletin1(bulletin1DTO);
+        GenericResponse<Object> response = new GenericResponse<>(HttpStatus.CREATED.value(), true,
+                "Bulletin-Part1 '" + bulletin1DTODetails.getApplicationNo() + "' created successfully.", bulletin1DTODetails);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
-	@Operation(summary = "Get all Bulletin1", description = "Retrieves a list of all Bulletin1.")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Bulletin1 Details retrieved successfully"),
-			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("/getAll")
-	public List<Bulletin1DetailsDTO> getAllBulletin1Details(
-			@RequestParam(required = false) Boolean isActive,
-			@RequestParam(required = false) Boolean draftStatus,
-			@RequestParam(required = false) Long lokSabhaNo,
-			@RequestParam(required = false) Long lokSabhaSessionNo,
-			@RequestParam(required = false) Long rajyaSabhaSessionNo,
-			@RequestParam(required = false) LocalDate startDate,
-			@RequestParam(required = false) LocalDate endDate,
-			@RequestParam(required = false) String status) {
-		// return service.getAllBulletin1Details(sessionNo);
-		return service.getBulletin1s(isActive, draftStatus, lokSabhaNo, lokSabhaSessionNo,
-				rajyaSabhaSessionNo, startDate, endDate, status);
-	}
+    @Operation(summary = "Get all Bulletin1", description = "Retrieves a list of all Bulletin1.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Bulletin1 Details retrieved successfully"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")})
+    @GetMapping("/getAll")
+    public List<Bulletin1DetailsDTO> getAllBulletin1Details(
+            @RequestParam(required = false) Boolean isActive,
+            @RequestParam(required = false) Boolean draftStatus,
+            @RequestParam(required = false) Long lokSabhaNo,
+            @RequestParam(required = false) Long lokSabhaSessionNo,
+            @RequestParam(required = false) Long rajyaSabhaSessionNo,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) String status) {
+        // return service.getAllBulletin1Details(sessionNo);
+        return service.getBulletin1s(isActive, draftStatus, lokSabhaNo, lokSabhaSessionNo,
+                rajyaSabhaSessionNo, startDate, endDate, status);
+    }
 
-	@Operation(summary = "Update Bulletin1 Details", description = "Updates a Bulletin1 Details by its ID.")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Bulletin1 Details updated successfully"),
-			@ApiResponse(responseCode = "404", description = "Bulletin1 Details not found"),
-			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@PutMapping("update/{id}")
-	public ResponseEntity<GenericResponse<Bulletin1DetailsDTO>> updateBulletin1(@PathVariable Long id,
-			@RequestBody Bulletin1DetailsDTO bulletin1DTO) {
-		Bulletin1DetailsDTO updatedbulletin1DTO = service.updateBulletin1(id, bulletin1DTO);
-		GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
-				"Bulletin1 Details updated successfully.", updatedbulletin1DTO);
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+    @Operation(summary = "Update Bulletin-part1 Details", description = "Updates a Bulletin1 Details by its ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Bulletin1 Details updated successfully"),
+        @ApiResponse(responseCode = "404", description = "Bulletin1 Details not found"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")})
+    @PutMapping("update/{id}")
+    public ResponseEntity<GenericResponse<Bulletin1DetailsDTO>> updateBulletin1(@PathVariable Long id,
+            @RequestBody Bulletin1DetailsDTO bulletin1DTO) {
+        Bulletin1DetailsDTO updatedbulletin1DTO = service.updateBulletin1(id, bulletin1DTO);
+        String message = "";
+        if (updatedbulletin1DTO.getStatus().equalsIgnoreCase("returned")) {
+            message = "Bulletin-Part1 '" + updatedbulletin1DTO.getApplicationNo() + "' returned successfully.";
+        } else {
+            message = "Bulletin-Part1 '" + updatedbulletin1DTO.getApplicationNo() + "' updated successfully.";
 
-	@Operation(summary = "Get Bulletin1 By Id", description = "Retrieve all Bulletin1 By its Id.")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Bulletin1 retrieved successfully"),
-			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("get/{id}")
-	public ResponseEntity<GenericResponse<Bulletin1DetailsDTO>> getBulletin1ById(@PathVariable Long id) {
-		Bulletin1DetailsDTO bulletin1DTO = service.getBulletin1ById(id);
-		GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
-				"Bulletin1 Details retrieved successfully.", bulletin1DTO);
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+        }
+        GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
+                message, updatedbulletin1DTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get Bulletin1 By Id", description = "Retrieve all Bulletin1 By its Id.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Bulletin1 retrieved successfully"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")})
+    @GetMapping("get/{id}")
+    public ResponseEntity<GenericResponse<Bulletin1DetailsDTO>> getBulletin1ById(@PathVariable Long id) {
+        Bulletin1DetailsDTO bulletin1DTO = service.getBulletin1ById(id);
+        GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
+                "Bulletin-Part1 Details retrieved successfully.", bulletin1DTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }
