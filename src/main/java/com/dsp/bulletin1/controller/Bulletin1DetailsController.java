@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+              
 import com.dsp.bulletin1.dto.Bulletin1DetailsDTO;
 import com.dsp.bulletin1.response.GenericResponse;
 import com.dsp.bulletin1.service.Bulletin1DetailsService;
@@ -48,7 +48,7 @@ public class Bulletin1DetailsController {
     public ResponseEntity<GenericResponse<Object>> createBulletin1(@RequestBody Bulletin1DetailsDTO bulletin1DTO) {
         Bulletin1DetailsDTO bulletin1DTODetails = service.createBulletin1(bulletin1DTO);
         GenericResponse<Object> response = new GenericResponse<>(HttpStatus.CREATED.value(), true,
-                "Bulletin-Part1 '" + bulletin1DTODetails.getApplicationNo() + "' created successfully.", bulletin1DTODetails);
+                "Bulletin-Part1 created successfully.", bulletin1DTODetails);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -82,9 +82,9 @@ public class Bulletin1DetailsController {
         Bulletin1DetailsDTO updatedbulletin1DTO = service.updateBulletin1(id, bulletin1DTO);
         String message = "";
         if (updatedbulletin1DTO.getStatus().equalsIgnoreCase("returned")) {
-            message = "Bulletin-Part1 '" + updatedbulletin1DTO.getApplicationNo() + "' returned successfully.";
+            message = "Bulletin-Part1 returned successfully.";
         } else {
-            message = "Bulletin-Part1 '" + updatedbulletin1DTO.getApplicationNo() + "' updated successfully.";
+            message = "Bulletin-Part1 updated successfully.";
 
         }
         GenericResponse<Bulletin1DetailsDTO> response = new GenericResponse<>(HttpStatus.OK.value(), true,
