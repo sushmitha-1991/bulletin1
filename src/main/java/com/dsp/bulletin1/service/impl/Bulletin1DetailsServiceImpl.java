@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +34,7 @@ import com.dsp.bulletin1.repository.Bulletin1DetailsRepository;
 import com.dsp.bulletin1.repository.MasterLSSRepository;
 import com.dsp.bulletin1.repository.MastersRSSRepository;
 import com.dsp.bulletin1.repository.MyUserRepository;
+import com.dsp.bulletin1.response.GenericResponse;
 import com.dsp.bulletin1.service.Bulletin1DetailsService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +47,8 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
     private static final String USER_ID_SESSION_ATTR = "userId";
     @Value("${master.service.url}")
     private String masterServiceUrl;
+    @Value("${workflow.service.url}")
+    private String draftedServiceUrl;
     @Autowired
     private HttpServletRequest httpRequest;
     @Autowired
@@ -60,14 +67,13 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         this.bulletin1Repository = bulletin1Repository;
         this.masterLSSRepository = masterLSSRepository;
     }
+
     @Override
     public Bulletin1DetailsDTO createBulletin1(Bulletin1DetailsDTO bulletin1DTO) {
-        if (bulletin1DTO.getDraftStatus() != null && bulletin1DTO.getDraftStatus()) {
-            bulletin1DTO.setStatus("Draft");
-        } else {
-            bulletin1DTO.setDraftStatus(false);
+        if (bulletin1DTO.getStatus() == null) {
             bulletin1DTO.setStatus("In Progress");
         }
+
         bulletin1DTO.setCurrentStatus(bulletin1DTO.getStatus());
         // Save By House
         Long houseId = null;
@@ -106,8 +112,10 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         }
         System.out.println("entity bulletin1");
         System.out.println(bulletin1Details);
-        SerialNumberResponse application = generateApplicationNo(serialNumberRequest);
-        bulletin1Details.setApplicationNo(application.getId());
+        if (StringUtils.isBlank(bulletin1DTO.getApplicationNo())) {
+            SerialNumberResponse application = generateApplicationNo(serialNumberRequest);
+            bulletin1Details.setApplicationNo(application.getId());
+        }
         bulletin1Details.setRefNo(bulletin1Details.getApplicationNo());
         bulletin1Details.setHtmlContentEnglish(bulletin1Details.getBulletin1Content());
         LOGGER.debug("Entering save Bulletin1  with Bulletin1 DTO: {}", bulletin1Details);
@@ -122,6 +130,13 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             Bulletin1Details Bulletin = bulletin1Repository.save(savedBulletin);
             Bulletin1DetailsDTO responseDTO = Bulletin1DetailsMapper.toDTO(Bulletin);
             LOGGER.debug("Returning Bulletin DTO with ApplicationInstanceDTO: {}", responseDTO);
+            //deleting Drafted Entry if available
+            if (!StringUtils.isBlank(bulletin1DTO.getApplicationNo())) {
+                // Get the Draft ID from draft table using appNo
+                String res = deleteDraftEntry(bulletin1DTO.getApplicationNo());
+                System.out.println("res:::::::" + res);
+                // /delete-save-as-draft
+            }
             return responseDTO;
         } catch (Exception e) {
             LOGGER.error("Error in save Bulletin1: ", e);
@@ -230,14 +245,18 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         Specification<Bulletin1Details> spec = Specification.where(null);
         spec = spec.and(Bulletin1Spec.isActive(isActive));
         spec = spec.and(Bulletin1Spec.hasDraftStatus(draftStatus));
-        if (lokSabhaSessionNo != null)
+        if (lokSabhaSessionNo != null) {
             spec = spec.and(Bulletin1Spec.hasLokSabhaSessionNo(lokSabhaSessionNo));
-        if (rajyaSabhaSessionNo != null)
+        }
+        if (rajyaSabhaSessionNo != null) {
             spec = spec.and(Bulletin1Spec.hasRajyaSabhaSessionNo(rajyaSabhaSessionNo));
-        if (startDate != null || endDate != null)
+        }
+        if (startDate != null || endDate != null) {
             spec = spec.and(Bulletin1Spec.hasDateBetween(startDate, endDate));
-        if (status != null)
+        }
+        if (status != null) {
             spec = spec.and(Bulletin1Spec.hasStatus(status));
+        }
         entitys = bulletin1Repository.findAll(spec);
         Long houseId = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -291,4 +310,35 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
             throw e;
         }
     }
+
+    public String deleteDraftEntry(String applicationNo) {
+        String url = draftedServiceUrl + "/delete-save-as-draft?applicationNo=" + applicationNo;
+        String token = getTokenFromRequest();
+
+        if (token == null) {
+            throw new IllegalStateException("Authorization token is missing");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers); // No body needed for DELETE request
+
+        try {
+            ResponseEntity<GenericResponse> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, GenericResponse.class);
+
+            System.out.println("@@@");
+            System.out.println(response);
+            if (response.getBody() != null && response.getBody().isSuccess()) {
+                return response.getBody().getMessage(); // Return success message
+            } else {
+                return "Failed to delete draft entry";
+            }
+        } catch (Exception e) {
+            System.err.println("Error during API call: " + e.getMessage());
+            throw new RuntimeException("Failed to delete draft entry", e);
+        }
+    }
+
 }
