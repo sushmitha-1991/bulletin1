@@ -9,7 +9,7 @@ import com.dsp.bulletin1.entity.MastersRajyaSabhaSession;
 @Repository
 public interface MastersRSSRepository extends JpaRepository<MastersRajyaSabhaSession,Long>{
     
-    @Query(value = "SELECT id FROM master.rajya_sabha_session_master ORDER BY created_by DESC LIMIT 1", 
+    @Query(value = "SELECT id FROM master.rajya_sabha_session_master ORDER BY session_start DESC LIMIT 1", 
      nativeQuery = true)
     Long findLatestByCreatedBy();
 }
