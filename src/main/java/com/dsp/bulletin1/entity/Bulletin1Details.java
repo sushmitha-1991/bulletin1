@@ -64,8 +64,8 @@ public class Bulletin1Details extends ApplicationInstance {
 	@Column(name = "status")
 	private String status;
 
-	@Column(name = "starting_page_no")
-	private Long startingPageNo;
+	// @Column(name = "starting_page_no")
+	// private Long startingPageNo;
 
 	@Convert(converter = JsonConverter.class)
 	@Column(name = "foot_notes", columnDefinition = "jsonb")

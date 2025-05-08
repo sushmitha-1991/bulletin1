@@ -39,7 +39,7 @@ public class ApplicationInstance extends Auditable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "application_instance_seq")
-	@SequenceGenerator(name = "application_instance_seq", sequenceName = "application_instance_seq", allocationSize = 1)
+	@SequenceGenerator(name = "application_instance_seq", sequenceName = "master.application_instance_seq", allocationSize = 1)
 	private Long id;
 
 	@JoinColumn(name = "application_id", nullable = true)
@@ -82,5 +82,6 @@ public class ApplicationInstance extends Auditable {
 	private String htmlContentEnglish;
 	@Column(name = "html_content_hi", columnDefinition = "text")
 	private String htmlContentHindi;
-
+@Column(name = "starting_page_no")
+	private Long startingPageNo;
 }

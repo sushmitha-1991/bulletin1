@@ -37,6 +37,7 @@ public interface Bulletin1DetailsMapper {
                 .applicationNo(entity.getApplicationNo())
                 .currentStatus(entity.getCurrentStatus())
                 .refId(entity.getRefId())
+                .startingPageNo(entity.getStartingPageNo())
                 .applicationInstanceDTO(ApplicationInstanceDTO.builder()
                         .id(entity.getId())
                         .applicationId(entity.getApplicationId())
