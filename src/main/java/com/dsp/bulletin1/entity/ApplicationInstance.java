@@ -50,7 +50,7 @@ public class ApplicationInstance extends Auditable {
 
 	@Column(name = "ref_Id")
 	private Long refId;
-	
+
 	@Column(name = "document_date")
 	private LocalDate documentDate;
 
@@ -82,6 +82,6 @@ public class ApplicationInstance extends Auditable {
 	private String htmlContentEnglish;
 	@Column(name = "html_content_hi", columnDefinition = "text")
 	private String htmlContentHindi;
-@Column(name = "starting_page_no")
+	@Column(name = "starting_page_no")
 	private Long startingPageNo;
 }
