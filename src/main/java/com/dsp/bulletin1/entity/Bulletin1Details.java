@@ -1,5 +1,6 @@
 package com.dsp.bulletin1.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +67,13 @@ public class Bulletin1Details extends ApplicationInstance {
 
 	// @Column(name = "starting_page_no")
 	// private Long startingPageNo;
+	//ReferenceDocument
+// DateOfDocument
+ 
+	@Column(name = "reference_document")
+	private String referenceDocument;
+	 @Column(name = "date_of_document")
+	private LocalDate dateOfDocument;
 
 	@Convert(converter = JsonConverter.class)
 	@Column(name = "foot_notes", columnDefinition = "jsonb")

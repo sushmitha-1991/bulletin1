@@ -297,12 +297,12 @@ public class Bulletin1DetailsServiceImpl implements Bulletin1DetailsService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+        System.out.println("requst "+request);
         HttpEntity<SerialNumberRequest> entity = new HttpEntity<>(request, headers);
         try {
             // RestTemplate restTemplate = new RestTemplate();
-            LOGGER.info("getting application no using Api Call", entity);
-            LOGGER.info("getting application no using Api Call", entity);
-
+            LOGGER.info("getting application no using Api Call  {}", entity);
+            System.out.println("entity "+entity);
             return restTemplate.postForObject(url, entity, SerialNumberResponse.class);
         } catch (Exception e) {
             System.err.println("Error during API call: " + e.getMessage());

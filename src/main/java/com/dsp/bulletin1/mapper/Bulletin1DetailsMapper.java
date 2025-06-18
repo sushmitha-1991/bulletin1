@@ -28,6 +28,10 @@ public interface Bulletin1DetailsMapper {
                 .bulletin1Content(entity.getBulletin1Content())
                 .draftStatus(entity.getDraftStatus())
                 .status(entity.getStatus())
+
+                .referenceDocument(entity.getReferenceDocument())
+                .dateOfDocument(entity.getDateOfDocument())
+                
                 .footNotes(entity.getFootNotes())
                 .documents(entity.getDocuments())
                 .lokSabhaNo(entity.getLokSabhaNo())
@@ -95,6 +99,8 @@ public interface Bulletin1DetailsMapper {
                 .status(dto.getStatus())
                 .footNotes(dto.getFootNotes())
                 .documents(dto.getDocuments())
+                .referenceDocument(dto.getReferenceDocument())
+                .dateOfDocument(dto.getDateOfDocument())
                 .lokSabhaNo(dto.getLokSabhaNo())
                 .lokSabhaSessionNo(dto.getLokSabhaSessionNo())
                 .rajyaSabhaSessionNo(dto.getRajyaSabhaSessionNo())

@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+
 import lombok.Setter;
 
 @Data
@@ -30,7 +32,6 @@ public class Bulletin1DetailsDTO {
     // private Date bulletinDate;
     private String bulletinDate;
 
-
     private String bulletinDateHindi;
     private Long lokSabhaNo;
 
@@ -46,6 +47,10 @@ public class Bulletin1DetailsDTO {
     private String status;
     private List<Map<String, Object>> footNotes;
     private List<Map<String, Object>> documents;
+//added on 18-06-2025
+    private String referenceDocument;
+    private LocalDate dateOfDocument;
+    //
 
     private MastersLokSabhaDTO lokSabhaDTO;
     private MastersRajyaSabhaSessionDTO rajyaSabhaSessionDTO;
